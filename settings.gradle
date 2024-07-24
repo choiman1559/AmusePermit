@@ -20,6 +20,7 @@ dependencyResolutionManagement {
 }
 
 rootProject.name = "AmusePermit"
-include ':headful'
 include ':amuse_permit'
+include ':headful'
 include ':headless'
+include ':client-example'

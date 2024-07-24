@@ -3,11 +3,11 @@ plugins {
 }
 
 android {
-    namespace 'com.amuse.permit'
+    namespace 'com.amuse.client'
     compileSdk 34
 
     defaultConfig {
-        applicationId "com.amuse.permit"
+        applicationId "com.amuse.client"
         minSdk 23
         targetSdk 34
         versionCode 1
@@ -29,7 +29,7 @@ android {
 }
 
 dependencies {
-    implementation libs.jackson.databind
+
     implementation libs.appcompat
     implementation libs.material
     testImplementation libs.junit
