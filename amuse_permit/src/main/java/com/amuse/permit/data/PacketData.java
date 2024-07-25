@@ -10,6 +10,10 @@ public class PacketData {
     public String ticketId;
     public ArgsInfo argsInfo;
 
+    public PacketData() {
+
+    }
+
     public PacketData(Bundle bundle) {
         this.actionType = bundle.getString(ProcessConst.KEY_ACTION_TYPE);
         this.fromPackageName = bundle.getString(ProcessConst.KEY_PACKAGE_NAME);

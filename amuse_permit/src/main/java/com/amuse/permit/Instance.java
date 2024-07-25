@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+@SuppressWarnings("unused")
 public class Instance {
     /***
      * Have to Implement these API wrappers
@@ -41,6 +42,7 @@ public class Instance {
 
     public NameFilters.NameFilter<String> packageNameFilter;
     public final HashMap<String, Processable> processableMap;
+    public NameFilters.NameFilter<String> apiNameFilter;
     private final ArrayList<String> serverFeaturedApis;
 
     private Instance() throws Exception {
@@ -72,6 +74,10 @@ public class Instance {
         return instance;
     }
 
+    public void setFeaturedApiTypeScope(NameFilters.NameFilter<String> apiNameFilter) {
+        this.apiNameFilter = apiNameFilter;
+    }
+
     public void setClientScope(NameFilters.NameFilter<String> packageNameFilter) {
         this.packageNameFilter = packageNameFilter;
     }
@@ -79,11 +85,16 @@ public class Instance {
     private void addService(@NonNull Class<?> cls) throws Exception {
         Processable processable = (Processable) cls.getDeclaredConstructor().newInstance();
         this.processableMap.put(processable.getType(), processable);
-        this.serverFeaturedApis.add(processable.getType());
+
+        if(apiNameFilter == null || apiNameFilter.accept(processable.getType())) {
+            this.serverFeaturedApis.add(processable.getType());
+        }
     }
 
     public void setServerPeer(AppPeer serverPeer) {
-        this.serverPeer = serverPeer;
+        if(hasModFlag(OPERATE_MODE_CLIENT)) {
+            this.serverPeer = serverPeer;
+        }
     }
 
     public int getServiceFlag() {
@@ -119,5 +130,9 @@ public class Instance {
         String[] data = new String[serverFeaturedApis.size()];
         serverFeaturedApis.toArray(data);
         return data;
+    }
+
+    public AppPeer getServerPeer() {
+        return serverPeer;
     }
 }

@@ -7,13 +7,13 @@ import android.net.Uri;
 import android.os.Bundle;
 
 import com.amuse.permit.Instance;
+import com.amuse.permit.data.ArgsInfo;
 import com.amuse.permit.data.PacketData;
 import com.amuse.permit.model.ResultTask;
 import com.amuse.permit.model.ServiceProcess;
 import com.amuse.permit.process.ProcessConst;
 import com.amuse.permit.process.ProcessRoute;
 import com.amuse.permit.process.ProcessStream;
-import com.amuse.permit.process.action.ClientAction;
 import com.amuse.permit.process.action.ServerAction;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
@@ -24,6 +24,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.lang.reflect.Method;
 
 public class FileProcessor extends ServiceProcess {
 
@@ -46,10 +47,25 @@ public class FileProcessor extends ServiceProcess {
                     break;
 
                 case ProcessConst.ACTION_REQUEST_METHOD:
-                    new ClientAction(context, packetData)
-                            .pushMethod(getType(), )
+                    FileNativeWrapper fileNativeWrapper = new FileNativeWrapper(baseFile);
+
+                    Class<?>[] clsArr = new Class<?>[packetData.argsInfo.size()];
+                    Object[] argsArr = new Object[packetData.argsInfo.size()];
+
+                    for(int i = 2; i < packetData.argsInfo.size(); i++) {
+                        clsArr[i] = packetData.argsInfo.getCls(i);
+                        argsArr[i] = packetData.argsInfo.getData(i);
+                    }
+
+                    Method method = getNativeImplClass().getDeclaredMethod((String) packetData.argsInfo.getData(1), clsArr);
+                    Object resultObj = method.invoke(fileNativeWrapper, argsArr);
+
+                    ArgsInfo resultArgs = new ArgsInfo();
+                    resultArgs.put(packetData.argsInfo.getCls(1), resultObj);
+
+                    new ServerAction(context, packetData)
+                            .pushMethod(getType(), resultArgs)
                             .send();
-                    // TODO: implement
                     break;
 
                 case ProcessConst.ACTION_REQUEST_MEMBER:
@@ -144,5 +160,10 @@ public class FileProcessor extends ServiceProcess {
     @Override
     public String getType() {
         return ProcessConst.ACTION_TYPE_FILE;
+    }
+
+    @Override
+    public Class<?> getNativeImplClass() {
+        return FileNativeWrapper.class;
     }
 }

@@ -7,7 +7,6 @@ import java.io.Serializable;
 
 public abstract class FileModel extends Wrappable implements Serializable {
     private static final long serialVersionUID = 3141592L;
-    private static final String ACTION_TYPE_FILE = "action_type_file";
 
     protected boolean canExecute;
     protected boolean canRead;
@@ -28,14 +27,4 @@ public abstract class FileModel extends Wrappable implements Serializable {
     protected boolean isHidden;
     protected long lastModified;
     protected long length;
-
-    @Override
-    public String getClassTag() {
-        return ACTION_TYPE_FILE;
-    }
-
-    @Override
-    public Class<?> getNativeImplClass() {
-        return FileNativeWrapper.class;
-    }
 }

@@ -11,13 +11,11 @@ import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 
 import com.amuse.permit.model.Annotations;
-import com.amuse.permit.model.NameFilters;
-import com.amuse.permit.model.ResultTask;
-import com.amuse.permit.model.Wrappable;
 
 import java.io.IOException;
 import java.net.URI;
 
+@SuppressWarnings("unused")
 public class FileNativeWrapper extends FileModel {
 
     private final java.io.File baseFileObj;
@@ -50,6 +48,11 @@ public class FileNativeWrapper extends FileModel {
         } catch (IOException e) {
             this.canonicalPath = null;
         }
+    }
+
+    @Annotations.ResponserSide
+    public static FileNativeWrapper createTempFile(String prefix, String suffix) throws IOException {
+        return new FileNativeWrapper(java.io.File.createTempFile(prefix, suffix));
     }
 
     @Annotations.ResponserSide

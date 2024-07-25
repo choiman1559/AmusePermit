@@ -56,6 +56,16 @@ public class ServerAction extends ActionBuilder {
         return this;
     }
 
+    public ServerAction pushMethod(String apiType, ArgsInfo argsInfo) {
+        Bundle extras = new Bundle();
+        extras.putString(ProcessConst.KEY_TARGET, apiType);
+        extras.putString(ProcessConst.KEY_ACTION_TYPE, ProcessConst.ACTION_RESPONSE_METHOD);
+
+        setArgs(argsInfo);
+        setBundle(extras);
+        return this;
+    }
+
     public ServerAction pushStream(String apiType, ArgsInfo argsInfo) {
         Bundle extras = new Bundle();
         extras.putString(ProcessConst.KEY_TARGET, apiType);

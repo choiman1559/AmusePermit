@@ -29,7 +29,7 @@ public class ClientAction extends ActionBuilder {
     public ClientAction pushMethod(String apiType, ArgsInfo argsInfo) {
         Bundle extras = new Bundle();
         extras.putString(ProcessConst.KEY_TARGET, apiType);
-        extras.putString(ProcessConst.KEY_ACTION_TYPE, ProcessConst.ACTION_RESPONSE_METHOD);
+        extras.putString(ProcessConst.KEY_ACTION_TYPE, ProcessConst.ACTION_REQUEST_MEMBER);
 
         setArgs(argsInfo);
         setBundle(extras);

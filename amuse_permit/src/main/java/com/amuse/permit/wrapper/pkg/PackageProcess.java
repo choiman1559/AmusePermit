@@ -17,4 +17,9 @@ public class PackageProcess extends ServiceProcess {
     public void onPacketReceived(Context context, Bundle bundle) throws Exception {
         super.onPacketReceived(context, bundle);
     }
+
+    @Override
+    public Class<?> getNativeImplClass() {
+        return null;
+    }
 }
