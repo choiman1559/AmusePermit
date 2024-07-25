@@ -29,9 +29,10 @@ android {
 }
 
 dependencies {
-
     implementation libs.appcompat
     implementation libs.material
+    implementation project(":amuse_permit")
+
     testImplementation libs.junit
     androidTestImplementation libs.ext.junit
     androidTestImplementation libs.espresso.core

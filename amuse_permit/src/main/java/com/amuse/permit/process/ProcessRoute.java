@@ -99,13 +99,19 @@ public class ProcessRoute extends BroadcastReceiver {
             return;
         }
 
-        if(!instance.packageNameFilter.accept(packetData.fromPackageName)) {
+        if(instance.packageNameFilter != null && !instance.packageNameFilter.accept(packetData.fromPackageName)) {
             IllegalAccessException exception = new IllegalAccessException("Package " + packetData.fromPackageName + " is not allowed in current scope");
             new ServerAction(context, packetData).setException(exception).send();
             return;
         }
 
         if(instance.processableMap.containsKey(packetData.actionType)) {
+            if(!instance.apiNameFilter.accept(packetData.actionType)) {
+                IllegalAccessException exception = new IllegalAccessException("Action Type " + packetData.actionType + " is not allowed in current server");
+                new ServerAction(context, packetData).setException(exception).send();
+                return;
+            }
+
             Processable processable = instance.processableMap.get(packetData.actionType);
             if(processable != null) {
                 try {
