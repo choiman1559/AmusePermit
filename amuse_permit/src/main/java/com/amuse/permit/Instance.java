@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.os.Build;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 
@@ -39,6 +40,9 @@ public class Instance {
     private int serviceMode = 0;
     private String appPackageName;
     private AppPeer serverPeer;
+
+    private final String LOG_TAG = "AmusePermission";
+    private boolean printLog;
 
     public NameFilters.NameFilter<String> packageNameFilter;
     public final HashMap<String, Processable> processableMap;
@@ -97,6 +101,10 @@ public class Instance {
         }
     }
 
+    public void setPrintLog(boolean printLog) {
+        this.printLog = printLog;
+    }
+
     public int getServiceFlag() {
         return serviceMode;
     }
@@ -118,9 +126,14 @@ public class Instance {
             listApps = packageManager.queryBroadcastReceivers(intent, PackageManager.ResolveInfoFlags.of(0));
         } else listApps = packageManager.queryBroadcastReceivers(intent, 0);
 
-        String[] listArr = new String[listApps.size()];
+        String[] listArr = new String[listApps.size() - 1];
         for (int i = 0; i < listArr.length; i++) {
             String packageName = listApps.get(i).activityInfo.packageName;
+            Instance.printLog(packageName);
+
+            if(packageName.equals(getInstance().appPackageName)) {
+                continue;
+            }
             listArr[i] = packageName;
         }
         return listArr;
@@ -134,5 +147,16 @@ public class Instance {
 
     public AppPeer getServerPeer() {
         return serverPeer;
+    }
+
+    public boolean isPrintLog() {
+        return printLog;
+    }
+
+    public static void printLog(String msg) {
+        Instance instance = getInstance();
+        if(instance.printLog) {
+            Log.d(instance.LOG_TAG, msg);
+        }
     }
 }

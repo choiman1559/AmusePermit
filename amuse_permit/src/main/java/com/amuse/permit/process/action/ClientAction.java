@@ -9,8 +9,8 @@ import com.amuse.permit.process.ProcessConst;
 
 public class ClientAction extends ActionBuilder {
 
-    public ClientAction(Context context, String packageName, String ticketId) {
-        super(context, packageName, ticketId);
+    public ClientAction(Context context, String packageName, String ticketId, String apiType, String actionType) {
+        super(context, packageName, ticketId, apiType, actionType);
     }
 
     public ClientAction(Context context, PacketData packetData) {
@@ -19,20 +19,40 @@ public class ClientAction extends ActionBuilder {
 
     public ClientAction pushHandShake() {
         Bundle extras = new Bundle();
-        extras.putString(ProcessConst.KEY_TARGET, ProcessConst.ACTION_TYPE_HANDSHAKE);
+        extras.putString(ProcessConst.KEY_API_TYPE, ProcessConst.ACTION_TYPE_HANDSHAKE);
         extras.putString(ProcessConst.KEY_ACTION_TYPE, ProcessConst.ACTION_REQUEST_HANDSHAKE);
 
         setBundle(extras);
         return this;
     }
 
+    public ClientAction pushClass(String apiType, ArgsInfo argsInfo) {
+        Bundle extras = new Bundle();
+        extras.putString(ProcessConst.KEY_API_TYPE, apiType);
+        extras.putString(ProcessConst.KEY_ACTION_TYPE, ProcessConst.ACTION_REQUEST_CLASS);
+
+        setBundle(extras);
+        setArgs(argsInfo);
+        return this;
+    }
+
     public ClientAction pushMethod(String apiType, ArgsInfo argsInfo) {
         Bundle extras = new Bundle();
-        extras.putString(ProcessConst.KEY_TARGET, apiType);
-        extras.putString(ProcessConst.KEY_ACTION_TYPE, ProcessConst.ACTION_REQUEST_MEMBER);
+        extras.putString(ProcessConst.KEY_API_TYPE, apiType);
+        extras.putString(ProcessConst.KEY_ACTION_TYPE, ProcessConst.ACTION_REQUEST_METHOD);
 
-        setArgs(argsInfo);
         setBundle(extras);
+        setArgs(argsInfo);
+        return this;
+    }
+
+    public ClientAction pushStream(String apiType, ArgsInfo argsInfo) {
+        Bundle extras = new Bundle();
+        extras.putString(ProcessConst.KEY_API_TYPE, apiType);
+        extras.putString(ProcessConst.KEY_ACTION_TYPE, ProcessConst.ACTION_REQUEST_STREAM);
+
+        setBundle(extras);
+        setArgs(argsInfo);
         return this;
     }
 }

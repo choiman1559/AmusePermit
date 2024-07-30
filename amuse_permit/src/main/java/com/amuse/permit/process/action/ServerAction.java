@@ -11,8 +11,8 @@ import com.amuse.permit.process.ProcessConst;
 
 public class ServerAction extends ActionBuilder {
 
-    public ServerAction(Context context, String packageName, String ticketId) {
-        super(context, packageName, ticketId);
+    public ServerAction(Context context, String packageName, String ticketId, String apiType, String actionType) {
+        super(context, packageName, ticketId, apiType, actionType);
     }
 
     public ServerAction(Context context, PacketData packetData) {
@@ -21,11 +21,13 @@ public class ServerAction extends ActionBuilder {
 
     public ServerAction setException(Exception exception) {
         Bundle bundle = new Bundle();
-        bundle.putString(ProcessConst.KEY_TARGET, ProcessConst.ACTION_TYPE_HANDSHAKE);
+        bundle.putString(ProcessConst.KEY_API_TYPE, ProcessConst.ACTION_TYPE_HANDSHAKE);
         bundle.putString(ProcessConst.KEY_ACTION_TYPE, ProcessConst.ACTION_RESPONSE_EXCEPTION);
 
         setBundle(bundle);
         setSerializable(exception);
+
+        exception.printStackTrace();
         return this;
     }
 
@@ -38,18 +40,18 @@ public class ServerAction extends ActionBuilder {
         argsInfo.put(Boolean.class, instance.packageNameFilter.accept(packageName));
         argsInfo.put(String[].class, instance.getServerFeaturedApis());
 
-        extras.putString(ProcessConst.KEY_TARGET, ProcessConst.ACTION_TYPE_HANDSHAKE);
+        extras.putString(ProcessConst.KEY_API_TYPE, ProcessConst.ACTION_TYPE_HANDSHAKE);
         extras.putString(ProcessConst.KEY_ACTION_TYPE, ProcessConst.ACTION_RESPONSE_HANDSHAKE);
 
-        setArgs(argsInfo);
         setBundle(extras);
+        setArgs(argsInfo);
         return this;
     }
 
     public ServerAction pushClass(String apiType, Wrappable wrappable) {
         Bundle extras = new Bundle();
-        extras.putString(ProcessConst.KEY_TARGET, apiType);
-        extras.putString(ProcessConst.KEY_ACTION_TYPE, ProcessConst.ACTION_RESPONSE_EXCEPTION);
+        extras.putString(ProcessConst.KEY_API_TYPE, apiType);
+        extras.putString(ProcessConst.KEY_ACTION_TYPE, ProcessConst.ACTION_RESPONSE_CLASS);
 
         setBundle(extras);
         setSerializable(wrappable);
@@ -58,18 +60,18 @@ public class ServerAction extends ActionBuilder {
 
     public ServerAction pushMethod(String apiType, ArgsInfo argsInfo) {
         Bundle extras = new Bundle();
-        extras.putString(ProcessConst.KEY_TARGET, apiType);
+        extras.putString(ProcessConst.KEY_API_TYPE, apiType);
         extras.putString(ProcessConst.KEY_ACTION_TYPE, ProcessConst.ACTION_RESPONSE_METHOD);
 
-        setArgs(argsInfo);
         setBundle(extras);
+        setArgs(argsInfo);
         return this;
     }
 
     public ServerAction pushStream(String apiType, ArgsInfo argsInfo) {
         Bundle extras = new Bundle();
-        extras.putString(ProcessConst.KEY_TARGET, apiType);
-        extras.putString(ProcessConst.KEY_ACTION_TYPE, ProcessConst.ACTION_RESPONSE_EXCEPTION);
+        extras.putString(ProcessConst.KEY_API_TYPE, apiType);
+        extras.putString(ProcessConst.KEY_ACTION_TYPE, ProcessConst.ACTION_RESPONSE_STREAM);
         extras.putSerializable(ProcessConst.KEY_ARGS, argsInfo);
 
         setBundle(extras);

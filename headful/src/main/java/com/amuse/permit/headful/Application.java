@@ -1,12 +1,9 @@
-package com.amuse.permit.headless;
+package com.amuse.permit.headful;
 
 import android.content.Context;
-import android.util.Log;
 
 import com.amuse.permit.Instance;
 import com.amuse.permit.model.NameFilters;
-
-import java.util.Arrays;
 
 public class Application extends android.app.Application {
     @Override
@@ -20,7 +17,6 @@ public class Application extends android.app.Application {
             if(Instance.getInstance(true) == null) {
                 Instance instance = Instance.initialize(context, Instance.OPERATE_MODE_SERVER);
                 instance.setClientScope((NameFilters.NameFilter<String>) object -> true);
-                Log.d("dddd", Arrays.toString(Instance.getAvailablePeers(context))); //TODO: Remove
             }
         } catch (Exception e) {
             throw new RuntimeException(e);

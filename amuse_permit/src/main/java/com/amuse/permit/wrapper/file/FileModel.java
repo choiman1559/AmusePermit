@@ -4,8 +4,7 @@ import com.amuse.permit.model.Wrappable;
 
 import java.io.Serializable;
 
-
-public abstract class FileModel extends Wrappable implements Serializable {
+public class FileModel extends Wrappable implements Serializable {
     private static final long serialVersionUID = 3141592L;
 
     protected boolean canExecute;
@@ -27,4 +26,8 @@ public abstract class FileModel extends Wrappable implements Serializable {
     protected boolean isHidden;
     protected long lastModified;
     protected long length;
+
+    public FileModel() {
+        // Stub constructor for Object Mapper
+    }
 }

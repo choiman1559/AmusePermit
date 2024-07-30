@@ -6,9 +6,10 @@ import android.content.UriMatcher;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.ParcelFileDescriptor;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
+
+import com.amuse.permit.Instance;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -23,21 +24,27 @@ public class ProcessStream extends ContentProvider {
     public static final HashMap<String, FileInputStream> inputStreamMap = new HashMap<>();
     public static final HashMap<String, FileOutputStream> outputStreamMap = new HashMap<>();
 
-    private static final String AUTHORITY = ProcessConst.PACKAGE_STREAM;
     private static final int FILE = 1;
-    private static final UriMatcher uriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
-
-    static {
-        uriMatcher.addURI(AUTHORITY, "*", FILE);
-    }
+    private static UriMatcher uriMatcher;
 
     @Override
     public boolean onCreate() {
         return true;
     }
 
+    private static void initializeUriMatcher() {
+        if(uriMatcher == null) {
+            Instance instance = Instance.getInstance();
+            String AUTHORITY = String.format("%s$%s", ProcessConst.PACKAGE_STREAM, instance.getAppPackageName());
+
+            uriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
+            uriMatcher.addURI(AUTHORITY, "*", FILE);
+        }
+    }
+
     @Override
     public ParcelFileDescriptor openFile(@NonNull Uri uri, @NonNull String mode) throws FileNotFoundException {
+        initializeUriMatcher();
         int match = uriMatcher.match(uri);
         if (match != FILE) {
             throw new FileNotFoundException("Unsupported URI: " + uri);
@@ -46,20 +53,21 @@ public class ProcessStream extends ContentProvider {
         try {
             String[] ipcChannelUri = uri.toString().split("/");
             String ipcChannelName = ipcChannelUri[ipcChannelUri.length - 1];
+            String ipcChannelType = ipcChannelName.split("_")[1];
 
             ParcelFileDescriptor[] pipe = ParcelFileDescriptor.createReliablePipe();
             ParcelFileDescriptor destFileDescriptor;
             ParcelFileDescriptor targetFileDescriptor;
             Thread transportThread;
 
-            switch (ipcChannelName) {
-                case ProcessConst.STREAM_OUTPUT:
+            switch (ipcChannelType) {
+                case ProcessConst.STREAM_INPUT:
                     destFileDescriptor = pipe[0];
                     targetFileDescriptor = pipe[1];
                     transportThread = new FileReadTransferThread(ipcChannelName, new ParcelFileDescriptor.AutoCloseOutputStream(targetFileDescriptor));
                     break;
 
-                case ProcessConst.STREAM_INPUT:
+                case ProcessConst.STREAM_OUTPUT:
                     destFileDescriptor = pipe[1];
                     targetFileDescriptor = pipe[0];
                     transportThread = new FileWriteTransferThread(ipcChannelName, new ParcelFileDescriptor.AutoCloseInputStream(targetFileDescriptor));
@@ -94,7 +102,6 @@ public class ProcessStream extends ContentProvider {
 
         @Override
         public void run() {
-            Log.d("ddd", "ReFileTransferThread.FileWriteTransferThread");
             try {
                 byte[] buf = new byte[8192];
                 int length;
@@ -111,7 +118,6 @@ public class ProcessStream extends ContentProvider {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                Log.d("ddd", "ReFileTransferThread.FileTransferThread22222");
             }
         }
     }
@@ -129,7 +135,6 @@ public class ProcessStream extends ContentProvider {
 
         @Override
         public void run() {
-            Log.d("ddd", "ReFileTransferThread.FileReadTransferThread");
             try {
                 byte[] buf = new byte[8192];
                 int length;
@@ -146,7 +151,6 @@ public class ProcessStream extends ContentProvider {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                Log.d("ddd", "ReFileTransferThread.FileTransferThread22222");
             }
         }
     }

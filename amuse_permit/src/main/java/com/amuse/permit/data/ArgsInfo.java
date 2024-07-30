@@ -6,6 +6,7 @@ import java.util.ArrayList;
 
 @SuppressWarnings("unused")
 public class ArgsInfo implements Serializable {
+    private static final long serialVersionUID = 31415926L;
     private final ArrayList<Class<?>> clsArrays;
     private final ArrayList<Object> dataArrays;
 

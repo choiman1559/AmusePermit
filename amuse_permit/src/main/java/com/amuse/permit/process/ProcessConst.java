@@ -26,7 +26,7 @@ public class ProcessConst {
     public static final String ACTION_RESPONSE_HANDSHAKE = "action_response_handshake";
     public static final String ACTION_RESPONSE_EXCEPTION = "action_response_exception";
 
-    public static final String KEY_TARGET = "key_target";
+    public static final String KEY_API_TYPE = "key_api_type";
     public static final String KEY_ACTION_TYPE = "key_action_type";
     public static final String KEY_PACKAGE_NAME = "key_package_name";
     public static final String KEY_ARGS = "key_args";
@@ -34,7 +34,7 @@ public class ProcessConst {
     public static final String KEY_STREAM_KEY = "key_stream_key";
     public static final String KEY_TICKET_ID = "key_ticket_id";
 
-    public static final String STREAM_KEY_PREFIX = "stream_%s";
-    public static final String STREAM_INPUT = "stream_input";
-    public static final String STREAM_OUTPUT = "stream_output";
+    public static final String STREAM_KEY_PREFIX = "stream_%s_%s";
+    public static final String STREAM_INPUT = "input";
+    public static final String STREAM_OUTPUT = "output";
 }

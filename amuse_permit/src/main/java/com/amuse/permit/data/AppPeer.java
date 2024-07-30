@@ -3,6 +3,7 @@ package com.amuse.permit.data;
 import android.content.Context;
 
 import com.amuse.permit.model.ResultTask;
+import com.amuse.permit.process.ProcessConst;
 import com.amuse.permit.process.action.ClientAction;
 import com.amuse.permit.process.ProcessRoute;
 
@@ -24,7 +25,7 @@ public class AppPeer {
         resultTask.mOnInvokeAttached = (r) -> {
             String ticket = packageName + System.currentTimeMillis();
             ProcessRoute.registerInnerResultTask(ticket, resultTask);
-            new ClientAction(context, packageName, ticket)
+            new ClientAction(context, packageName, ticket, ProcessConst.ACTION_TYPE_HANDSHAKE, ProcessConst.ACTION_REQUEST_HANDSHAKE)
                     .pushHandShake()
                     .send();
         };

@@ -1,5 +1,5 @@
 plugins {
-    alias(libs.plugins.android.application)
+    id 'com.android.library'
 }
 
 android {
@@ -7,7 +7,6 @@ android {
     compileSdk 34
 
     defaultConfig {
-        applicationId "com.amuse.permit"
         minSdk 23
         targetSdk 34
         versionCode 1

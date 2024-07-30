@@ -5,6 +5,7 @@ import android.os.Bundle;
 import com.amuse.permit.process.ProcessConst;
 
 public class PacketData {
+    public String apiType;
     public String actionType;
     public String fromPackageName;
     public String ticketId;
@@ -15,6 +16,7 @@ public class PacketData {
     }
 
     public PacketData(Bundle bundle) {
+        this.apiType = bundle.getString(ProcessConst.KEY_API_TYPE);
         this.actionType = bundle.getString(ProcessConst.KEY_ACTION_TYPE);
         this.fromPackageName = bundle.getString(ProcessConst.KEY_PACKAGE_NAME);
         this.ticketId = bundle.getString(ProcessConst.KEY_TICKET_ID);

@@ -19,13 +19,23 @@ import java.util.concurrent.ConcurrentHashMap;
 public class ProcessRoute extends BroadcastReceiver {
 
     public static ConcurrentHashMap<String, ResultTask<?>> resultTaskHashMap = new ConcurrentHashMap<>();
+    public static ConcurrentHashMap<String, Context> resultObjContextHashMap = new ConcurrentHashMap<>();
 
     public static void registerInnerResultTask(String ticket, ResultTask<?> resultTask) {
         resultTaskHashMap.put(ticket, resultTask);
     }
 
+    public static void registerInnerResultTask(Context context, String ticket, ResultTask<?> resultTask) {
+        resultObjContextHashMap.put(ticket, context);
+        registerInnerResultTask(ticket, resultTask);
+    }
+
     public static void unregisterInnerResultTask(String ticket) {
         resultTaskHashMap.remove(ticket);
+    }
+
+    public static void unregisterInnerResultObjContext(String ticket) {
+        resultObjContextHashMap.remove(ticket);
     }
 
     public static void callInnerResultTask(String ticket, ResultTask.Result<?> resultObj) {
@@ -38,29 +48,39 @@ public class ProcessRoute extends BroadcastReceiver {
         }
     }
 
+    public static Context getInnerResultObjContext(String ticket) {
+        if(resultObjContextHashMap.containsKey(ticket)) {
+            Context context = resultObjContextHashMap.get(ticket);
+            unregisterInnerResultObjContext(ticket);
+            return context;
+        }
+        return null;
+    }
+
     @Override
     public void onReceive(Context context, Intent intent) {
+        Instance.printLog("received + " + intent.getStringExtra(ProcessConst.KEY_API_TYPE));
         Instance instance = Instance.getInstance();
+
         String intentAction = intent.getAction();
         if(intentAction == null || !intentAction.equals(ProcessConst.PACKAGE_BROADCAST_ACTION)) {
             return;
         }
 
         Bundle bundle = intent.getExtras();
-        if(bundle == null) {
-            NullPointerException exception = new NullPointerException("Bundle extra KEY_TARGET must not be Null");
-            String fromPackageName = intent.getStringExtra(ProcessConst.KEY_PACKAGE_NAME);
-            String ticketId = intent.getStringExtra(ProcessConst.KEY_TICKET_ID);
 
-            new ServerAction(context, fromPackageName, ticketId)
-                    .setException(exception)
-                    .send();
+        if(bundle == null) {
+            PacketData packetData = new PacketData();
+            NullPointerException exception = new NullPointerException("Bundle extra KEY_TARGET must not be Null");
+            packetData.fromPackageName = intent.getStringExtra(ProcessConst.KEY_PACKAGE_NAME);
+            packetData.ticketId = intent.getStringExtra(ProcessConst.KEY_TICKET_ID);
+            sendException(context, packetData, exception);
             return;
         }
 
         PacketData packetData = new PacketData(Objects.requireNonNull(bundle));
 
-        if(packetData.actionType.equals(ProcessConst.ACTION_TYPE_HANDSHAKE)) {
+        if(packetData.apiType.equals(ProcessConst.ACTION_TYPE_HANDSHAKE)) {
             String actionType = intent.getStringExtra(ProcessConst.KEY_ACTION_TYPE);
             if(actionType != null) switch (actionType) {
                 case ProcessConst.ACTION_REQUEST_HANDSHAKE:
@@ -70,7 +90,7 @@ public class ProcessRoute extends BroadcastReceiver {
                     break;
 
                 case ProcessConst.ACTION_RESPONSE_HANDSHAKE:
-                    ArgsInfo argsInfo = (ArgsInfo) intent.getSerializableExtra(ProcessConst.KEY_EXTRA_DATA);
+                    ArgsInfo argsInfo = (ArgsInfo) intent.getSerializableExtra(ProcessConst.KEY_ARGS);
                     ResultTask.Result<AppPeer> resultObj = new ResultTask.Result<>();
                     resultObj.setHasException(false);
 
@@ -89,11 +109,7 @@ public class ProcessRoute extends BroadcastReceiver {
                     break;
 
                 case ProcessConst.ACTION_RESPONSE_EXCEPTION:
-                    ResultTask.Result<?> exceptionObj = new ResultTask.Result<>();
-                    exceptionObj.setSuccess(false);
-                    exceptionObj.setHasException(true);
-                    exceptionObj.setException((Exception) intent.getSerializableExtra(ProcessConst.KEY_EXTRA_DATA));
-                    callInnerResultTask(packetData.ticketId, exceptionObj);
+                    sendException(context, packetData, (Exception) intent.getSerializableExtra(ProcessConst.KEY_EXTRA_DATA));
                     break;
             }
             return;
@@ -101,34 +117,42 @@ public class ProcessRoute extends BroadcastReceiver {
 
         if(instance.packageNameFilter != null && !instance.packageNameFilter.accept(packetData.fromPackageName)) {
             IllegalAccessException exception = new IllegalAccessException("Package " + packetData.fromPackageName + " is not allowed in current scope");
-            new ServerAction(context, packetData).setException(exception).send();
+            sendException(context, packetData, exception);
             return;
         }
 
-        if(instance.processableMap.containsKey(packetData.actionType)) {
-            if(!instance.apiNameFilter.accept(packetData.actionType)) {
-                IllegalAccessException exception = new IllegalAccessException("Action Type " + packetData.actionType + " is not allowed in current server");
-                new ServerAction(context, packetData).setException(exception).send();
+        if(instance.processableMap.containsKey(packetData.apiType)) {
+            if(instance.apiNameFilter != null && !instance.apiNameFilter.accept(packetData.apiType)) {
+                IllegalAccessException exception = new IllegalAccessException("API Type " + packetData.apiType + " is not allowed in current server");
+                sendException(context, packetData, exception);
                 return;
             }
 
-            Processable processable = instance.processableMap.get(packetData.actionType);
+            Processable processable = instance.processableMap.get(packetData.apiType);
             if(processable != null) {
                 try {
                     processable.onPacketReceived(context, intent.getExtras());
                 } catch (Exception exception) {
-                    new ServerAction(context, packetData)
-                            .setException(exception)
-                            .send();
+                    sendException(context, packetData, exception);
                 }
             } else {
                 NullPointerException exception = new NullPointerException("Processable Service found but instance is null");
-                new ServerAction(context, packetData)
-                        .setException(exception)
-                        .send();
+                sendException(context, packetData, exception);
             }
         } else {
             IllegalStateException exception = new IllegalStateException("Service type must not be Null or has not registered as Processable class");
+            sendException(context, packetData, exception);
+        }
+    }
+
+    public static void sendException(Context context, PacketData packetData, Exception exception) {
+        if(resultTaskHashMap.containsKey(packetData.ticketId)) {
+            ResultTask.Result<?> exceptionObj = new ResultTask.Result<>();
+            exceptionObj.setSuccess(false);
+            exceptionObj.setHasException(true);
+            exceptionObj.setException(exception);
+            callInnerResultTask(packetData.ticketId, exceptionObj);
+        } else {
             new ServerAction(context, packetData)
                     .setException(exception)
                     .send();

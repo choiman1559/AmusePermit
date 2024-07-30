@@ -3,8 +3,6 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <uses-permission android:name="com.amuse.permit.DATA_TRANSFER" />
-
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -16,19 +14,21 @@
         <receiver
             android:name=".process.ProcessRoute"
             android:exported="true"
-            android:permission="com.amuse.permit.DATA_TRANSFER">
+            tools:ignore="ExportedReceiver">
             <intent-filter>
                 <action android:name="com.amuse.permit.DATA_TRANSFER"/>
             </intent-filter>
         </receiver>
 
+        <!--
         <provider
-            android:name=".process.ProcessStream"
-            android:authorities="com.amuse.permit.process.ProcessStream"
+            android:name="com.amuse.permit.process.ProcessStream"
+            android:authorities="com.amuse.permit.process.ProcessStream$[YOUR PACKAGE NAME]"
             android:exported="true"
             android:grantUriPermissions="true"
             tools:ignore="ExportedContentProvider">
         </provider>
+        -->
     </application>
 
     <queries>

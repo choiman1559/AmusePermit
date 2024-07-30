@@ -19,3 +19,6 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+
+-keep class com.amuse.permit.** implements java.io.Serializable { *; }
+-keep class com.amuse.permit.** implements android.os.Parcelable { *; }

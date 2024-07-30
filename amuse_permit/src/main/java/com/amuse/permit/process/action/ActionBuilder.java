@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcelable;
-import android.util.Log;
 
 import com.amuse.permit.Instance;
 import com.amuse.permit.data.ArgsInfo;
@@ -23,7 +22,7 @@ public class ActionBuilder {
     Instance instance;
     Intent intent;
 
-    public ActionBuilder(Context context, String packageName, String ticketId) {
+    public ActionBuilder(Context context, String packageName, String ticketId, String apiType, String actionType) {
         instance = Instance.getInstance();
         intent = new Intent();
         intent.setAction(ProcessConst.PACKAGE_BROADCAST_ACTION);
@@ -35,11 +34,26 @@ public class ActionBuilder {
         intent.addFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
         intent.putExtra(ProcessConst.KEY_PACKAGE_NAME, instance.getAppPackageName());
         intent.putExtra(ProcessConst.KEY_TICKET_ID, ticketId);
+        intent.putExtra(ProcessConst.KEY_API_TYPE, apiType);
+        intent.putExtra(ProcessConst.KEY_ACTION_TYPE, actionType);
         intent.setComponent(new ComponentName(packageName, ProcessConst.PACKAGE_BROADCAST));
     }
 
     public ActionBuilder(Context context, PacketData packetData) {
-        new ActionBuilder(context, packetData.fromPackageName, packetData.ticketId);
+        instance = Instance.getInstance();
+        intent = new Intent();
+        intent.setAction(ProcessConst.PACKAGE_BROADCAST_ACTION);
+
+        this.context = context;
+        this.packageName = packetData.fromPackageName;
+        this.ticketId = packetData.ticketId;
+
+        intent.addFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
+        intent.putExtra(ProcessConst.KEY_PACKAGE_NAME, instance.getAppPackageName());
+        intent.putExtra(ProcessConst.KEY_TICKET_ID, ticketId);
+        intent.putExtra(ProcessConst.KEY_API_TYPE, packetData.apiType);
+        intent.putExtra(ProcessConst.KEY_ACTION_TYPE, packetData.actionType);
+        intent.setComponent(new ComponentName(packageName, ProcessConst.PACKAGE_BROADCAST));
     }
 
     public ActionBuilder setBundle(Bundle bundle) {
@@ -64,6 +78,6 @@ public class ActionBuilder {
 
     public void send() {
         context.sendBroadcast(intent);
-        Log.d("sent", packageName + " " + intent.getStringExtra(ProcessConst.KEY_ACTION_TYPE));
+        Instance.printLog( "Sent/ " + packageName + " " + intent.getStringExtra(ProcessConst.KEY_ACTION_TYPE));
     }
 }
