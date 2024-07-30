@@ -10,6 +10,7 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 
 import com.amuse.permit.data.AppPeer;
+import com.amuse.permit.model.Annotations;
 import com.amuse.permit.model.NameFilters;
 import com.amuse.permit.model.Processable;
 import com.amuse.permit.process.ProcessConst;
@@ -78,7 +79,7 @@ public class Instance {
         return instance;
     }
 
-    public void setFeaturedApiTypeScope(NameFilters.NameFilter<String> apiNameFilter) {
+    public void setFeaturedApiTypeScope(NameFilters.NameFilter<@Annotations.ApiTypes String> apiNameFilter) {
         this.apiNameFilter = apiNameFilter;
     }
 
@@ -89,10 +90,7 @@ public class Instance {
     private void addService(@NonNull Class<?> cls) throws Exception {
         Processable processable = (Processable) cls.getDeclaredConstructor().newInstance();
         this.processableMap.put(processable.getType(), processable);
-
-        if(apiNameFilter == null || apiNameFilter.accept(processable.getType())) {
-            this.serverFeaturedApis.add(processable.getType());
-        }
+        this.serverFeaturedApis.add(processable.getType());
     }
 
     public void setServerPeer(AppPeer serverPeer) {
@@ -101,7 +99,7 @@ public class Instance {
         }
     }
 
-    public void setPrintLog(boolean printLog) {
+    public void setPrintDebugLog(boolean printLog) {
         this.printLog = printLog;
     }
 
@@ -140,8 +138,15 @@ public class Instance {
     }
 
     public String[] getServerFeaturedApis() {
-        String[] data = new String[serverFeaturedApis.size()];
-        serverFeaturedApis.toArray(data);
+        ArrayList<String> dataArray = new ArrayList<>();
+        for(String apiName : serverFeaturedApis) {
+            if(apiNameFilter == null || apiNameFilter.accept(apiName)) {
+                dataArray.add(apiName);
+            }
+        }
+
+        String[] data = new String[dataArray.size()];
+        dataArray.toArray(data);
         return data;
     }
 

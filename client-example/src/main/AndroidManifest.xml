@@ -20,6 +20,7 @@
             </intent-filter>
         </activity>
 
+        <!-- Optional for client-only Application, But Strongly recommend to add -->
         <provider
             android:name="com.amuse.permit.process.ProcessStream"
             android:authorities="com.amuse.permit.process.ProcessStream$com.amuse.client"

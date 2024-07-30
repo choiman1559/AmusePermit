@@ -1,5 +1,9 @@
 package com.amuse.permit.model;
 
+import androidx.annotation.StringDef;
+
+import com.amuse.permit.process.ProcessConst;
+
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -25,4 +29,9 @@ public class Annotations {
     @Target({ElementType.CONSTRUCTOR, ElementType.METHOD, ElementType.PACKAGE})
     public @interface Constructor {
     }
+
+    @Retention(RetentionPolicy.RUNTIME)
+    @Target({ElementType.TYPE_USE, ElementType.PARAMETER, ElementType.TYPE})
+    @StringDef({ProcessConst.ACTION_TYPE_FILE, ProcessConst.ACTION_TYPE_LOCATION, ProcessConst.ACTION_TYPE_PACKAGE, ProcessConst.ACTION_TYPE_TELEPHONY})
+    public @interface ApiTypes { }
 }

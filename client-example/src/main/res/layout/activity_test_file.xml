@@ -58,11 +58,18 @@
             android:text="createNewFile" />
 
         <com.google.android.material.button.MaterialButton
+            android:id="@+id/delete"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAllCaps="false"
+            android:text="delete" />
+
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/list"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textAllCaps="false"
-            android:text="list" />
+            android:text="listFiles" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/mkdirs"
@@ -117,6 +124,7 @@
             android:text="Result Text"/>
 
         <TextView
+            android:id="@+id/resultTextView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginTop="16dp"

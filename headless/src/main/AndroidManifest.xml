@@ -32,6 +32,8 @@
             </intent-filter>
         </receiver>
 
+        <!-- Have to add this specific provider in order to use Input/Output Stream
+            android:authorities format: "com.amuse.permit.process.ProcessStream$[YOUR_APP_PACKAGE_NAME]" -->
         <provider
             android:name="com.amuse.permit.process.ProcessStream"
             android:authorities="com.amuse.permit.process.ProcessStream$com.amuse.permit.headless"

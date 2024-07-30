@@ -2,6 +2,8 @@ package com.amuse.permit.data;
 
 import android.content.Context;
 
+import com.amuse.permit.Instance;
+import com.amuse.permit.model.Annotations;
 import com.amuse.permit.model.ResultTask;
 import com.amuse.permit.process.ProcessConst;
 import com.amuse.permit.process.action.ClientAction;
@@ -46,5 +48,13 @@ public class AppPeer {
 
     public String[] getFeaturedApis() {
         return featuredApis;
+    }
+
+    public boolean hasApiFeature(@Annotations.ApiTypes String type) {
+        String[] featureArray = Instance.getInstance().getServerPeer().getFeaturedApis();
+        for(String feature : featureArray) {
+            if(feature.equals(type)) return true;
+        }
+        return false;
     }
 }

@@ -1,35 +1,129 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_marginHorizontal="16dp"
     android:layout_marginVertical="16dp"
-    android:orientation="vertical"
     tools:ignore="HardcodedText">
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/fileMenu"
+    <androidx.appcompat.widget.LinearLayoutCompat
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="File API" />
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/telephonyMenu"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Telephony API" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:textColor="@color/material_dynamic_neutral0"
+            android:text="Server Peer Setup"/>
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/packageMenu"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Package query API" />
+        <EditText
+            android:id="@+id/peerPackageName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Target Server PackageName"
+            android:inputType="text"
+            tools:ignore="Autofill" />
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/locationMenu"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Geo-Location API" />
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/fetchPeer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAllCaps="false"
+            android:text="Fetch Server Metadata" />
 
-</androidx.appcompat.widget.LinearLayoutCompat>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:textColor="@color/material_dynamic_neutral0"
+            android:text="Default Provider Packages"/>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/SelectHeadlessServer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAllCaps="false"
+                android:text="Headless"
+                android:layout_alignParentStart="true"
+                android:layout_toStartOf="@id/dummyView"
+                android:layout_marginEnd="8dp"/>
+
+            <TextView
+                android:id="@+id/dummyView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/SelectHeadfulServer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAllCaps="false"
+                android:text="Headful"
+                android:layout_marginStart="8dp"
+                android:layout_alignParentEnd="true"
+                android:layout_toEndOf="@id/dummyView"/>
+        </RelativeLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:textColor="@color/material_dynamic_neutral0"
+            android:layout_marginTop="16dp"
+            android:text="Apis Test Menu"/>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/fileMenu"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAllCaps="false"
+            android:text="File API" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/telephonyMenu"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAllCaps="false"
+            android:text="Telephony API" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/packageMenu"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAllCaps="false"
+            android:text="Package query API" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/locationMenu"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAllCaps="false"
+            android:text="Geo-Location API" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:textSize="16sp"
+            android:textColor="@color/material_dynamic_neutral0"
+            android:text="Result Text"/>
+
+        <TextView
+            android:id="@+id/resultTextView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="16dp"
+            android:textSize="16sp"
+            android:text="Result will shown here"/>
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+</androidx.core.widget.NestedScrollView>
