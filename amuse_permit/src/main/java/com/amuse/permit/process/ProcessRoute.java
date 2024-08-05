@@ -122,7 +122,9 @@ public class ProcessRoute extends BroadcastReceiver {
         }
 
         if(instance.processableMap.containsKey(packetData.apiType)) {
-            if(instance.apiNameFilter != null && !instance.apiNameFilter.accept(packetData.apiType)) {
+            if(instance.hasModFlag(Instance.OPERATE_MODE_SERVER)
+                    && instance.apiNameFilter != null
+                    && !instance.apiNameFilter.accept(packetData.apiType)) {
                 IllegalAccessException exception = new IllegalAccessException("API Type " + packetData.apiType + " is not allowed in current server");
                 sendException(context, packetData, exception);
                 return;

@@ -11,10 +11,6 @@ import com.amuse.permit.process.ProcessConst;
 
 public class ServerAction extends ActionBuilder {
 
-    public ServerAction(Context context, String packageName, String ticketId, String apiType, String actionType) {
-        super(context, packageName, ticketId, apiType, actionType);
-    }
-
     public ServerAction(Context context, PacketData packetData) {
         super(context, packetData);
     }
@@ -55,6 +51,16 @@ public class ServerAction extends ActionBuilder {
 
         setBundle(extras);
         setSerializable(wrappable);
+        return this;
+    }
+
+    public ServerAction pushMember(String apiType, ArgsInfo argsInfo) {
+        Bundle extras = new Bundle();
+        extras.putString(ProcessConst.KEY_API_TYPE, apiType);
+        extras.putString(ProcessConst.KEY_ACTION_TYPE, ProcessConst.ACTION_RESPONSE_METHOD);
+
+        setBundle(extras);
+        setArgs(argsInfo);
         return this;
     }
 

@@ -9,8 +9,8 @@ public class ProcessConst {
 
     public static final String ACTION_TYPE_HANDSHAKE = "handshake";
     public static final String ACTION_TYPE_FILE = "file";
-    public static final String ACTION_TYPE_LOCATION = "location";
-    public static final String ACTION_TYPE_PACKAGE = "package";
+    public static final String ACTION_TYPE_LOCATION = "locate";
+    public static final String ACTION_TYPE_PACKAGE = "pkg";
     public static final String ACTION_TYPE_TELEPHONY = "telephony";
 
     public static final String ACTION_REQUEST_CLASS = "action_request_class";

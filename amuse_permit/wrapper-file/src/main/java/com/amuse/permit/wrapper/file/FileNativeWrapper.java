@@ -10,19 +10,27 @@ import android.os.Environment;
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 
+import com.amuse.permit.data.ArgsInfo;
 import com.amuse.permit.model.Annotations;
+import com.amuse.permit.model.ServiceProcess;
+import com.amuse.permit.model.Wrappable;
 
 import java.io.IOException;
 import java.net.URI;
 
 @SuppressWarnings("unused")
+@Annotations.ResponserSide
 public class FileNativeWrapper extends FileModel {
 
     private final java.io.File baseFileObj;
 
-    @Annotations.ResponserSide
+    public FileNativeWrapper() {
+        baseFileObj = Environment.getExternalStorageDirectory();
+    }
+
     @SuppressLint("UsableSpace")
-    public FileNativeWrapper(java.io.File baseFileObj) {
+    @Annotations.Constructor
+    private FileNativeWrapper(java.io.File baseFileObj) {
         this.baseFileObj = baseFileObj;
         this.canExecute = baseFileObj.canExecute();
         this.canRead = baseFileObj.canRead();
@@ -50,12 +58,19 @@ public class FileNativeWrapper extends FileModel {
         }
     }
 
-    @Annotations.ResponserSide
+    @Override
+    public Wrappable createServerInstance(@NonNull ArgsInfo packetData) {
+        String filePath = (String) packetData.getData(0);
+        java.io.File baseFile = new java.io.File(filePath);
+        return new FileNativeWrapper(baseFile);
+    }
+
+    @Annotations.NativeWrapper
     public static FileNativeWrapper createTempFile(String prefix, String suffix) throws IOException {
         return new FileNativeWrapper(java.io.File.createTempFile(prefix, suffix));
     }
 
-    @Annotations.ResponserSide
+    @Annotations.NativeWrapper
     public boolean createNewFile() {
         try {
             return baseFileObj.createNewFile();
@@ -64,81 +79,81 @@ public class FileNativeWrapper extends FileModel {
         }
     }
 
-    @Annotations.ResponserSide
+    @Annotations.NativeWrapper
     public boolean delete() {
         return baseFileObj.delete();
     }
 
-    @Annotations.ResponserSide
+    @Annotations.NativeWrapper
     public String[] list() {
         return baseFileObj.list();
     }
 
-    @Annotations.ResponserSide
-    public FileNativeWrapper[] listFiles() {
+    @Annotations.NativeWrapper
+    public FileModel[] listFiles() {
         java.io.File[] listFile = baseFileObj.listFiles();
         if(listFile != null) {
-            FileNativeWrapper[] files = new FileNativeWrapper[listFile.length];
+            FileModel[] files = new FileModel[listFile.length];
             for(int i = 0; i < files.length; i++) {
-                files[i] = new FileNativeWrapper(listFile[i]);
+                files[i] = (FileModel) ServiceProcess.convertToFinalFormat(new FileNativeWrapper(listFile[i]), FileModel.class);
             }
 
             return files;
         }
-        return new FileNativeWrapper[0];
+        return new FileModel[0];
     }
 
-    @Annotations.ResponserSide
-    public static FileNativeWrapper[] listRoots() {
+    @Annotations.NativeWrapper
+    public static FileModel[] listRoots() {
         java.io.File[] listFile = java.io.File.listRoots();
-        FileNativeWrapper[] files = new FileNativeWrapper[listFile.length];
+        FileModel[] files = new FileModel[listFile.length];
         for(int i = 0; i < files.length; i++) {
-            files[i] = new FileNativeWrapper(listFile[i]);
+            files[i] = (FileModel) ServiceProcess.convertToFinalFormat(new FileNativeWrapper(listFile[i]), FileModel.class);
         }
         return files;
     }
 
-    @Annotations.ResponserSide
+    @Annotations.NativeWrapper
     public boolean mkdir() {
         return baseFileObj.mkdir();
     }
 
-    @Annotations.ResponserSide
+    @Annotations.NativeWrapper
     public boolean mkdirs() {
         return baseFileObj.mkdirs();
     }
 
-    @Annotations.ResponserSide
+    @Annotations.NativeWrapper
     public boolean renameTo(File dest) {
-        return baseFileObj.renameTo(new java.io.File(dest.absolutePath));
+        return baseFileObj.renameTo(new java.io.File(dest.getAbsolutePath()));
     }
 
-    @Annotations.ResponserSide
+    @Annotations.NativeWrapper
     public boolean setExecutable(boolean executable) {
         return baseFileObj.setExecutable(executable);
     }
 
-    @Annotations.ResponserSide
+    @Annotations.NativeWrapper
     public boolean setLastModified(long time) {
         return baseFileObj.setLastModified(time);
     }
 
-    @Annotations.ResponserSide
+    @Annotations.NativeWrapper
     public boolean setReadOnly() {
         return baseFileObj.setReadOnly();
     }
 
-    @Annotations.ResponserSide
+    @Annotations.NativeWrapper
     public boolean setReadable(boolean readable) {
         return baseFileObj.setReadable(readable);
     }
 
-    @Annotations.ResponserSide
+    @Annotations.NativeWrapper
     public boolean setWritable(boolean writable) {
         return baseFileObj.setWritable(writable);
     }
 
-    @Annotations.ResponserSide
+    @Annotations.NativeWrapper
     public URI toURI() {
         return baseFileObj.toURI();
     }

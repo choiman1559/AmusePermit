@@ -3,6 +3,7 @@ package com.amuse.permit.model;
 import android.content.Context;
 import androidx.annotation.NonNull;
 
+import com.amuse.permit.data.ArgsInfo;
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonSetter;
@@ -27,5 +28,9 @@ public abstract class Wrappable implements Serializable {
 
     public boolean checkPermissionGranted(@NonNull Context context) {
         return false;
+    }
+
+    public Wrappable createServerInstance(@NonNull ArgsInfo argsInfo) {
+        return null;
     }
 }

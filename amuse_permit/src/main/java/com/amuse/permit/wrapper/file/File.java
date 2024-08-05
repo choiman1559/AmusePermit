@@ -10,16 +10,14 @@ import com.amuse.permit.data.PacketData;
 import com.amuse.permit.model.Annotations;
 import com.amuse.permit.model.NameFilters;
 import com.amuse.permit.model.ResultTask;
+import com.amuse.permit.model.ServiceProcess;
 import com.amuse.permit.process.ProcessConst;
 import com.amuse.permit.process.ProcessRoute;
 import com.amuse.permit.process.action.ClientAction;
 import com.amuse.permit.process.action.ResultCreator;
-import com.fasterxml.jackson.annotation.JsonAutoDetect;
+
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.PropertyAccessor;
-import com.fasterxml.jackson.databind.InjectableValues;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -234,7 +232,7 @@ public class File extends FileModel {
                                                @Nullable NameFilters.NameFilter<String> filterWithName,
                                                @Nullable NameFilters.NameFilterWithExtra<String, File> filterWithObj) {
         ResultTask<File[]> finalResult = new ResultTask<>();
-        ResultTask<FileNativeWrapper[]> rawResult = new ResultCreator<FileNativeWrapper[]>(buildMethodCallPacketData(methodName, FileNativeWrapper[].class))
+        ResultTask<FileModel[]> rawResult = new ResultCreator<FileModel[]>(buildMethodCallPacketData(methodName, FileModel[].class))
                 .postMethodProcess(context);
 
         rawResult.setOnTaskCompleteListener(result -> {
@@ -245,8 +243,8 @@ public class File extends FileModel {
 
             if(result.isSuccess()) {
                 ArrayList<File> resultList = new ArrayList<>();
-                for(FileNativeWrapper files : (FileNativeWrapper []) result.getResultData()) {
-                    File convertedFileObj = File.convertFrom(files);
+                for(FileModel files : (FileModel[]) result.getResultData()) {
+                    File convertedFileObj = (File) ServiceProcess.convertToFinalFormat(files, File.class);
                     convertedFileObj.context = context;
                     convertedFileObj.setIsFetched(true);
 
@@ -371,15 +369,5 @@ public class File extends FileModel {
         packet.actionType = ProcessConst.ACTION_REQUEST_STREAM;
 
         return packet;
-    }
-
-    protected static File convertFrom(FileModel wrapper) {
-        InjectableValues.Std injectableValues = new InjectableValues.Std();
-        injectableValues.addValue("isFetched", true);
-
-        return new ObjectMapper()
-                .setInjectableValues(injectableValues)
-                .setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.PROTECTED_AND_PUBLIC)
-                .convertValue(wrapper, File.class);
     }
 }

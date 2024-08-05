@@ -86,6 +86,9 @@ public class FileActivity extends AppCompatActivity {
                     setApiButtonsEnabled(true);
                 } else {
                     setApiButtonsEnabled(false);
+                    if(result.hasException()) {
+                        result.getException().printStackTrace();
+                    }
                 }
             }).invokeTask();
         });

@@ -46,18 +46,12 @@ public class Instance {
     private boolean printLog;
 
     public NameFilters.NameFilter<String> packageNameFilter;
-    public final HashMap<String, Processable> processableMap;
+    public HashMap<String, Processable> processableMap;
     public NameFilters.NameFilter<String> apiNameFilter;
-    private final ArrayList<String> serverFeaturedApis;
+    private ArrayList<String> serverFeaturedApis;
 
     private Instance() throws Exception {
-        processableMap = new HashMap<>();
-        serverFeaturedApis = new ArrayList<>();
-
-        addService(FileProcessor.class);
-        addService(LocateProcessor.class);
-        addService(PackageProcess.class);
-        addService(TelephonyProcess.class);
+        initializeServices();
     }
 
     public static Instance initialize(Context context, int mode) throws Exception {
@@ -65,6 +59,16 @@ public class Instance {
         instance.serviceMode = mode;
         instance.appPackageName = context.getPackageName();
         return instance;
+    }
+
+    private void initializeServices() throws Exception {
+        processableMap = new HashMap<>();
+        serverFeaturedApis = new ArrayList<>();
+
+        addService(FileProcessor.class);
+        addService(LocateProcessor.class);
+        addService(PackageProcess.class);
+        addService(TelephonyProcess.class);
     }
 
     public static Instance getInstance() {
@@ -79,8 +83,9 @@ public class Instance {
         return instance;
     }
 
-    public void setFeaturedApiTypeScope(NameFilters.NameFilter<@Annotations.ApiTypes String> apiNameFilter) {
+    public void setFeaturedApiTypeScope(NameFilters.NameFilter<@Annotations.ApiTypes String> apiNameFilter) throws Exception {
         this.apiNameFilter = apiNameFilter;
+        initializeServices();
     }
 
     public void setClientScope(NameFilters.NameFilter<String> packageNameFilter) {
@@ -90,7 +95,21 @@ public class Instance {
     private void addService(@NonNull Class<?> cls) throws Exception {
         Processable processable = (Processable) cls.getDeclaredConstructor().newInstance();
         this.processableMap.put(processable.getType(), processable);
-        this.serverFeaturedApis.add(processable.getType());
+
+        try {
+            if (processable.getNativeImplClass() != null) {
+                processable.getNativeImplClass().newInstance();
+            } else {
+                return;
+            }
+        } catch (IllegalAccessException | InstantiationException e) {
+            //Native implementation Module is not dependent on this project; Rejects this api for server usage
+            return;
+        }
+
+        if(apiNameFilter == null || apiNameFilter.accept(processable.getType())) {
+            this.serverFeaturedApis.add(processable.getType());
+        }
     }
 
     public void setServerPeer(AppPeer serverPeer) {

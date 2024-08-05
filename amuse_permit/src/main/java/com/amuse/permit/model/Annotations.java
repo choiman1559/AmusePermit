@@ -16,7 +16,7 @@ public class Annotations {
     }
 
     @Retention(RetentionPolicy.RUNTIME)
-    @Target({ElementType.CONSTRUCTOR, ElementType.METHOD, ElementType.PACKAGE})
+    @Target({ElementType.TYPE, ElementType.CONSTRUCTOR, ElementType.METHOD, ElementType.PACKAGE})
     public @interface ResponserSide {
     }
 
@@ -31,6 +31,11 @@ public class Annotations {
     }
 
     @Retention(RetentionPolicy.RUNTIME)
+    @Target({ElementType.METHOD, ElementType.PACKAGE})
+    public @interface NativeWrapper {
+    }
+
+    @Retention(RetentionPolicy.SOURCE)
     @Target({ElementType.TYPE_USE, ElementType.PARAMETER, ElementType.TYPE})
     @StringDef({ProcessConst.ACTION_TYPE_FILE, ProcessConst.ACTION_TYPE_LOCATION, ProcessConst.ACTION_TYPE_PACKAGE, ProcessConst.ACTION_TYPE_TELEPHONY})
     public @interface ApiTypes { }
