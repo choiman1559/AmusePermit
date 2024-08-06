@@ -8,7 +8,7 @@ import android.os.Bundle;
 import com.amuse.permit.data.ArgsInfo;
 import com.amuse.permit.data.PacketData;
 import com.amuse.permit.model.ResultTask;
-import com.amuse.permit.model.ServiceProcess;
+import com.amuse.permit.process.ServiceProcess;
 import com.amuse.permit.process.ProcessConst;
 import com.amuse.permit.process.ProcessRoute;
 import com.amuse.permit.process.ProcessStream;
@@ -26,6 +26,8 @@ public class FileProcessor extends ServiceProcess {
     public void onClassRequested(Context context) throws Exception {
         PacketData packetData = getPacketData();
         FileModel model = ((FileModel) ((FileModel) getNativeImplClass().newInstance()).createServerInstance(packetData.argsInfo));
+
+        checkWrappablePermissionGranted(context, model);
         model.setIsFetched(true);
 
         new ServerAction(context, packetData)
@@ -58,6 +60,7 @@ public class FileProcessor extends ServiceProcess {
     public void onMethodRequested(Context context) throws Exception {
         PacketData packetData = getPacketData();
         FileModel fileNativeWrapper = ((FileModel) ((FileModel) getNativeImplClass().newInstance()).createServerInstance(packetData.argsInfo));
+        checkWrappablePermissionGranted(context, fileNativeWrapper);
 
         Class<?>[] clsArr = new Class<?>[packetData.argsInfo.size() - 2];
         Object[] argsArr = new Object[packetData.argsInfo.size() - 2];

@@ -1,4 +1,4 @@
-package com.amuse.permit.model;
+package com.amuse.permit.process;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -6,8 +6,9 @@ import android.os.Bundle;
 import com.amuse.permit.Instance;
 import com.amuse.permit.data.ArgsInfo;
 import com.amuse.permit.data.PacketData;
-import com.amuse.permit.process.ProcessConst;
-import com.amuse.permit.process.ProcessRoute;
+import com.amuse.permit.model.Processable;
+import com.amuse.permit.model.ResultTask;
+import com.amuse.permit.model.Wrappable;
 import com.amuse.permit.process.action.ServerAction;
 import com.amuse.permit.wrapper.file.File;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
@@ -75,6 +76,7 @@ public abstract class ServiceProcess implements Processable {
 
     public void onClassRequested(Context context) throws Exception {
         Wrappable model = (((Wrappable) getNativeImplClass().newInstance()).createServerInstance(packetData.argsInfo));
+        checkWrappablePermissionGranted(context, model);
         model.setIsFetched(true);
 
         new ServerAction(context, packetData)
@@ -84,6 +86,7 @@ public abstract class ServiceProcess implements Processable {
 
     public void onMethodRequested(Context context) throws Exception {
         Wrappable nativeWrapper = (((Wrappable) getNativeImplClass().newInstance()).createServerInstance(packetData.argsInfo));
+        checkWrappablePermissionGranted(context, nativeWrapper);
 
         Class<?>[] clsArr = new Class<?>[packetData.argsInfo.size() - 2];
         Object[] argsArr = new Object[packetData.argsInfo.size() - 2];
@@ -184,5 +187,11 @@ public abstract class ServiceProcess implements Processable {
 
     public PacketData getPacketData() {
         return packetData;
+    }
+
+    public void checkWrappablePermissionGranted(Context context, Wrappable wrappable) throws Exception{
+        if(!wrappable.checkPermissionGranted(context)) {
+            throw new IllegalStateException("Wrappable permission is not granted");
+        }
     }
 }

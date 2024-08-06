@@ -12,7 +12,7 @@ import androidx.core.content.ContextCompat;
 
 import com.amuse.permit.data.ArgsInfo;
 import com.amuse.permit.model.Annotations;
-import com.amuse.permit.model.ServiceProcess;
+import com.amuse.permit.process.ServiceProcess;
 import com.amuse.permit.model.Wrappable;
 
 import java.io.IOException;
@@ -66,8 +66,8 @@ public class FileNativeWrapper extends FileModel {
     }
 
     @Annotations.NativeWrapper
-    public static FileNativeWrapper createTempFile(String prefix, String suffix) throws IOException {
-        return new FileNativeWrapper(java.io.File.createTempFile(prefix, suffix));
+    public static FileModel createTempFile(String prefix, String suffix) throws IOException {
+        return (FileModel) ServiceProcess.convertToFinalFormat(new FileNativeWrapper(java.io.File.createTempFile(prefix, suffix)), FileModel.class);
     }
 
     @Annotations.NativeWrapper

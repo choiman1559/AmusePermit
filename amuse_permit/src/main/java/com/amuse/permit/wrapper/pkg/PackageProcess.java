@@ -3,7 +3,7 @@ package com.amuse.permit.wrapper.pkg;
 import android.content.Context;
 import android.os.Bundle;
 
-import com.amuse.permit.model.ServiceProcess;
+import com.amuse.permit.process.ServiceProcess;
 import com.amuse.permit.process.ProcessConst;
 
 public class PackageProcess extends ServiceProcess {

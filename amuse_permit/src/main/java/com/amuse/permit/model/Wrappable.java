@@ -27,7 +27,7 @@ public abstract class Wrappable implements Serializable {
     }
 
     public boolean checkPermissionGranted(@NonNull Context context) {
-        return false;
+        return true;
     }
 
     public Wrappable createServerInstance(@NonNull ArgsInfo argsInfo) {

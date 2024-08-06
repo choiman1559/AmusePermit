@@ -10,7 +10,7 @@ import com.amuse.permit.data.PacketData;
 import com.amuse.permit.model.Annotations;
 import com.amuse.permit.model.NameFilters;
 import com.amuse.permit.model.ResultTask;
-import com.amuse.permit.model.ServiceProcess;
+import com.amuse.permit.process.ServiceProcess;
 import com.amuse.permit.process.ProcessConst;
 import com.amuse.permit.process.ProcessRoute;
 import com.amuse.permit.process.action.ClientAction;

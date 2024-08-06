@@ -13,10 +13,10 @@ public class FileModel extends Wrappable implements Serializable {
     protected boolean exists;
     protected String absolutePath;
     protected String canonicalPath;
-    protected long freeSpace;
     protected String name;
     protected String parent;
     protected String path;
+    protected long freeSpace;
     protected long totalSpace;
     protected long usableSpace;
     protected int hashCode;
