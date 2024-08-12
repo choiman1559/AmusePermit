@@ -13,12 +13,11 @@ public class LocateProcessor extends ServiceProcess {
     }
 
     @Override
-    public void onPacketReceived(Context context, Bundle bundle) throws Exception {
-        super.onPacketReceived(context, bundle);
-    }
-
-    @Override
     public Class<?> getNativeImplClass() {
-        return null;
+        try {
+            return Class.forName(String.format("%s.wrapper.%s.LocateNativeWrapper", ProcessConst.PACKAGE_MODULE, getType()));
+        } catch (ClassNotFoundException e) {
+            return null;
+        }
     }
 }

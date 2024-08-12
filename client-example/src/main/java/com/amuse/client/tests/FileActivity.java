@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -60,6 +61,7 @@ public class FileActivity extends AppCompatActivity {
         MaterialButton toURI = findViewById(R.id.toURI);
         MaterialButton openFileOutputStream = findViewById(R.id.openFileOutputStream);
         MaterialButton openFileInputStream = findViewById(R.id.openFileInputStream);
+        MaterialButton openFileBenchMark = findViewById(R.id.openFileBenchMark);
 
         apiButtons.add(createNewFile);
         apiButtons.add(delete);
@@ -98,6 +100,7 @@ public class FileActivity extends AppCompatActivity {
         list.setOnClickListener((v) -> postApiAction(fileInstance.listFiles()));
         mkdirs.setOnClickListener((v) -> postApiAction(fileInstance.mkdirs()));
         toURI.setOnClickListener((v) -> postApiAction(fileInstance.toURI()));
+        openFileBenchMark.setOnClickListener((v) -> startActivity(new Intent(this, FileBenchMark.class)));
 
         openFileInputStream.setOnClickListener((v) -> {
             ResultTask<InputStream> resultTask = fileInstance.openFileInputStream();

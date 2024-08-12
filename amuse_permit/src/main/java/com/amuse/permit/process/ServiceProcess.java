@@ -189,7 +189,7 @@ public abstract class ServiceProcess implements Processable {
         return packetData;
     }
 
-    public void checkWrappablePermissionGranted(Context context, Wrappable wrappable) throws Exception{
+    public void checkWrappablePermissionGranted(Context context, Wrappable wrappable) throws Exception {
         if(!wrappable.checkPermissionGranted(context)) {
             throw new IllegalStateException("Wrappable permission is not granted");
         }

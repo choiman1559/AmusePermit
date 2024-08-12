@@ -21,11 +21,28 @@
         android:theme="@style/Theme.AmusePermit"
         tools:targetApi="31">
 
+        <activity android:name=".MainActivity" android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity>
+
         <receiver android:name=".BootReceiver" android:exported="false" android:enabled="true">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED"/>
             </intent-filter>
         </receiver>
+
+        <!-- Have to add this specific provider in order to use Input/Output Stream
+            android:authorities format: "com.amuse.permit.process.ProcessStream$[YOUR_APP_PACKAGE_NAME]" -->
+        <provider
+            android:name="com.amuse.permit.process.ProcessStream"
+            android:authorities="com.amuse.permit.process.ProcessStream$com.amuse.permit.headful"
+            android:exported="true"
+            android:grantUriPermissions="true"
+            tools:ignore="ExportedContentProvider">
+        </provider>
     </application>
 
 </manifest>
