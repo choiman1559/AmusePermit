@@ -13,6 +13,7 @@
 
         <activity android:name=".tests.FileActivity"/>
         <activity android:name=".tests.FileBenchMark"/>
+        <activity android:name=".tests.LocateActivity"/>
 
         <activity android:name=".MainActivity" android:exported="true">
             <intent-filter>

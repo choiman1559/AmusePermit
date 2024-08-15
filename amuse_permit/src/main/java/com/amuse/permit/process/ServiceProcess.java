@@ -91,9 +91,9 @@ public abstract class ServiceProcess implements Processable {
         Class<?>[] clsArr = new Class<?>[packetData.argsInfo.size() - 2];
         Object[] argsArr = new Object[packetData.argsInfo.size() - 2];
 
-        for(int i = 2; i < clsArr.length + 1; i++) {
-            clsArr[i] = packetData.argsInfo.getCls(i);
-            argsArr[i] = packetData.argsInfo.getData(i);
+        for(int i = 0; i < clsArr.length; i++) {
+            clsArr[i] = packetData.argsInfo.getCls(i + 2);
+            argsArr[i] = packetData.argsInfo.getData(i + 2);
         }
 
         Object resultObj;

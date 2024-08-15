@@ -33,4 +33,8 @@ public abstract class Wrappable implements Serializable {
     public Wrappable createServerInstance(@NonNull ArgsInfo argsInfo) {
         return null;
     }
+
+    public ResultTask<Wrappable> createServerInstance(@NonNull Context context, @NonNull ArgsInfo argsInfo) {
+        return null;
+    }
 }

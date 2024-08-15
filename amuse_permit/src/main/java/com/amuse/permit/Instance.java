@@ -28,7 +28,7 @@ public class Instance {
     /***
      * Have to Implement these API wrappers
      * • SMS & Phone Call State
-     * • Geo Location
+     * • Geo FusedLocationClient
      * • File I/O
      * • Package Query & Management
      */

@@ -34,6 +34,7 @@ dependencies {
 
     implementation project(":amuse_permit")
     implementation project(":amuse_permit:wrapper-file")
+    implementation project(":amuse_permit:wrapper-locate")
 
     testImplementation libs.junit
     androidTestImplementation libs.ext.junit

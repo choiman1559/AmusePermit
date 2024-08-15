@@ -20,6 +20,7 @@ public class Application extends android.app.Application {
             if(Instance.getInstance(true) == null) {
                 Instance instance = Instance.initialize(context, Instance.OPERATE_MODE_SERVER);
                 instance.setClientScope((NameFilters.NameFilter<String>) object -> true);
+                instance.setPrintDebugLog(true);
                 Log.d("dddd", Arrays.toString(Instance.getAvailablePeers(context))); //TODO: Remove
             }
         } catch (Exception e) {

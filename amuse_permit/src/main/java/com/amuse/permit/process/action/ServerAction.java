@@ -2,6 +2,7 @@ package com.amuse.permit.process.action;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Parcelable;
 
 import com.amuse.permit.Instance;
 import com.amuse.permit.data.ArgsInfo;
@@ -71,6 +72,20 @@ public class ServerAction extends ActionBuilder {
 
         setBundle(extras);
         setArgs(argsInfo);
+        return this;
+    }
+
+    public ServerAction pushMethod(String apiType, Parcelable parcelable) {
+        Bundle extras = new Bundle();
+        extras.putString(ProcessConst.KEY_API_TYPE, apiType);
+        extras.putString(ProcessConst.KEY_ACTION_TYPE, ProcessConst.ACTION_RESPONSE_METHOD);
+
+        ArgsInfo argsInfo = new ArgsInfo();
+        argsInfo.put(parcelable.getClass(), null);
+
+        setBundle(extras);
+        setArgs(argsInfo);
+        setParcelable(parcelable);
         return this;
     }
 

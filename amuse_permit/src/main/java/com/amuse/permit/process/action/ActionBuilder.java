@@ -62,7 +62,7 @@ public class ActionBuilder {
     }
 
     public ActionBuilder setArgs(ArgsInfo argsInfo) {
-        intent.putExtra(ProcessConst.KEY_ARGS, argsInfo);
+        intent.putExtra(ProcessConst.KEY_ARGS, (Serializable) argsInfo);
         return this;
     }
 
