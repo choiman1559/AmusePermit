@@ -1,5 +1,6 @@
 package com.amuse.client.tests;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
@@ -25,6 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+@SuppressLint("SetTextI18n")
 public class QueryPkgActivity extends AppCompatActivity {
 
     TextView resultTextView;

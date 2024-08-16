@@ -7,7 +7,10 @@ import android.content.pm.InstrumentationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PermissionInfo;
 import android.content.pm.ResolveInfo;
+import android.os.Build;
 import android.os.Parcelable;
+
+import androidx.annotation.RequiresApi;
 
 import com.amuse.permit.Instance;
 import com.amuse.permit.data.ArgsInfo;
@@ -58,7 +61,7 @@ public class PackageManager {
         return new ResultCreator<List<InstrumentationInfo>>(buildMethodCallPacketData("queryInstrumentation", List.class, targetPackage, flags)).postMethodProcess(context);
     }
 
-    @Deprecated
+    @Deprecated(since = "This function returns blank Array since SDK 33. Instead, Use PackageManager.getPackageInfo and then get PackageInfo.requestedPermissions (returns String[])")
     public ResultTask<List<PermissionInfo>> queryPermissionsByGroup (String permissionGroup, int flags) {
         return new ResultCreator<List<PermissionInfo>>(buildMethodCallPacketData("queryPermissionsByGroup", List.class, permissionGroup, flags)).postMethodProcess(context);
     }
@@ -67,6 +70,7 @@ public class PackageManager {
         return new ResultCreator<PackageInfo>(buildMethodCallPacketData("getPackageInfo", PackageInfo.class, packageName, flags)).postMethodProcess(context);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.UPSIDE_DOWN_CAKE)
     public ResultTask<Boolean[]> canPackageQuery (String sourcePackage, String[] targetPackages) {
         return new ResultCreator<Boolean[]>(buildMethodCallPacketData("canPackageQuery", Boolean[].class, sourcePackage, targetPackages)).postMethodProcess(context);
     }

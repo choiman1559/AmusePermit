@@ -8,10 +8,11 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PermissionInfo;
 import android.content.pm.ResolveInfo;
+import android.os.Build;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 
-import com.amuse.permit.Instance;
 import com.amuse.permit.data.ArgsInfo;
 import com.amuse.permit.model.Annotations;
 import com.amuse.permit.model.ResultTask;
@@ -73,7 +74,6 @@ public class QueryPkgNativeWrapper extends QueryPkgModel {
         return packageManager.queryInstrumentation(targetPackage, flags);
     }
 
-    @Deprecated(since = "This function returns blank Array since SDK 33. Instead, Use PackageManager.getPackageInfo and get PackageInfo.requestedPermissions")
     @Annotations.ResponserSide
     public List<PermissionInfo> queryPermissionsByGroup (String permissionGroup, Integer flags) throws PackageManager.NameNotFoundException {
         return packageManager.queryPermissionsByGroup(permissionGroup, flags);
@@ -84,6 +84,7 @@ public class QueryPkgNativeWrapper extends QueryPkgModel {
         return packageManager.getPackageInfo(packageName, flags);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.UPSIDE_DOWN_CAKE)
     @Annotations.ResponserSide
     public Boolean[] canPackageQuery (String sourcePkg, String[] targetPkgs) throws PackageManager.NameNotFoundException {
         boolean[] result = packageManager.canPackageQuery(sourcePkg, targetPkgs);
