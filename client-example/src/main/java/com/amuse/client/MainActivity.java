@@ -15,6 +15,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.amuse.client.tests.FileActivity;
 import com.amuse.client.tests.LocateActivity;
+import com.amuse.client.tests.QueryPkgActivity;
 import com.amuse.permit.Instance;
 import com.amuse.permit.data.AppPeer;
 import com.amuse.permit.model.ResultTask;
@@ -85,6 +86,7 @@ public class MainActivity extends AppCompatActivity {
         //TODO: Add activity for other apis
         fileMenu.setOnClickListener((v) -> startActivity(new Intent(this, FileActivity.class)));
         locationMenu.setOnClickListener((v) -> startActivity(new Intent(this, LocateActivity.class)));
+        packageMenu.setOnClickListener((v) -> startActivity(new Intent(this, QueryPkgActivity.class)));
     }
 
     void setApiButtonsEnabled(boolean enabled) {

@@ -11,9 +11,7 @@ import androidx.annotation.NonNull;
 
 import com.amuse.permit.Instance;
 
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -21,8 +19,8 @@ import java.util.HashMap;
 
 public class ProcessStream extends ContentProvider {
 
-    public static final HashMap<String, FileInputStream> inputStreamMap = new HashMap<>();
-    public static final HashMap<String, FileOutputStream> outputStreamMap = new HashMap<>();
+    public static final HashMap<String, InputStream> inputStreamMap = new HashMap<>();
+    public static final HashMap<String, OutputStream> outputStreamMap = new HashMap<>();
 
     private static final int FILE = 1;
     private static UriMatcher uriMatcher;
@@ -91,7 +89,7 @@ public class ProcessStream extends ContentProvider {
 
     private static class FileWriteTransferThread extends Thread {
         private final InputStream inputStream;
-        private final FileOutputStream outputStream;
+        private final OutputStream outputStream;
         private final String channelName;
 
         FileWriteTransferThread(String channelName, InputStream inputStream) {
@@ -124,7 +122,7 @@ public class ProcessStream extends ContentProvider {
 
     private static class FileReadTransferThread extends Thread {
         private final OutputStream outputStream;
-        private final FileInputStream inputStream;
+        private final InputStream inputStream;
         private final String channelName;
 
         FileReadTransferThread(String channelName, OutputStream outputStream) {

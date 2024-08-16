@@ -146,7 +146,7 @@ public class FileProcessor extends ServiceProcess {
     @Override
     public Class<?> getNativeImplClass() {
         try {
-            return Class.forName(String.format("%s.wrapper.%s.FileNativeWrapper", ProcessConst.PACKAGE_MODULE, getType()));
+            return Class.forName(String.format("%s.wrapper.%s.%sNativeWrapper", ProcessConst.PACKAGE_MODULE, getType(), "File"));
         } catch (ClassNotFoundException e) {
             return null;
         }

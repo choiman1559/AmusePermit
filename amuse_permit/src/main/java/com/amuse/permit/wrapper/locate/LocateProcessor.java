@@ -1,10 +1,10 @@
 package com.amuse.permit.wrapper.locate;
 
 import android.content.Context;
+import android.location.Location;
 import android.os.Bundle;
 import android.os.Parcelable;
 
-import com.amuse.permit.Instance;
 import com.amuse.permit.data.ArgsInfo;
 import com.amuse.permit.data.PacketData;
 import com.amuse.permit.model.ResultTask;
@@ -21,26 +21,37 @@ public class LocateProcessor extends ServiceProcess {
     @Override
     public void onMethodRequested(Context context) throws Exception {
         PacketData packetData = getPacketData();
-        ResultTask<Wrappable> locateModelTask = ((LocateModel) getNativeImplClass().newInstance()).createServerInstance(context, packetData.argsInfo);
+        ArgsInfo argsInfo = packetData.argsInfo;
+
+        LocateModel preProcesslocateModel = new LocateModel();
+        preProcesslocateModel.mockLocation = (Location) packetData.parcelableList.get(0);
+        preProcesslocateModel.isMock = (boolean) argsInfo.getData(1);
+        argsInfo.set(0, LocateModel.class, preProcesslocateModel);
+
+        ResultTask<Wrappable> locateModelTask = ((LocateModel) getNativeImplClass().newInstance()).createServerInstance(context, argsInfo);
 
         locateModelTask.setOnTaskCompleteListener(result -> {
             try {
                 if(result.isSuccess()) {
                     LocateModel locateModel = (LocateModel) result.getResultData();
-                    Class<?>[] clsArr = new Class<?>[packetData.argsInfo.size() - 2];
-                    Object[] argsArr = new Object[packetData.argsInfo.size() - 2];
+                    Class<?>[] clsArr = new Class<?>[packetData.argsInfo.size() - 3];
+                    Object[] argsArr = new Object[packetData.argsInfo.size() - 3];
 
                     for(int i = 0; i < clsArr.length; i++) {
-                        clsArr[i] = packetData.argsInfo.getCls(i + 2);
-                        argsArr[i] = packetData.argsInfo.getData(i + 2);
+                        clsArr[i] = packetData.argsInfo.getCls(i + 3);
+                        argsArr[i] = packetData.argsInfo.getData(i + 3);
+
+                        if(argsArr[i].equals(ProcessConst.KEY_PARCEL_REPLACED)) {
+                            argsArr[i] = packetData.parcelableList.get(i + 3);
+                        }
                     }
 
                     ResultTask<?> resultObj;
                     if(clsArr.length > 0) {
-                        Method method = getNativeImplClass().getDeclaredMethod((String) packetData.argsInfo.getData(1), clsArr);
+                        Method method = getNativeImplClass().getDeclaredMethod((String) packetData.argsInfo.getData(2), clsArr);
                         resultObj = (ResultTask<?>) method.invoke(locateModel, argsArr);
                     } else {
-                        Method method = getNativeImplClass().getDeclaredMethod((String) packetData.argsInfo.getData(1));
+                        Method method = getNativeImplClass().getDeclaredMethod((String) packetData.argsInfo.getData(2));
                         resultObj = (ResultTask<?>) method.invoke(locateModel);
                     }
 
@@ -90,8 +101,8 @@ public class LocateProcessor extends ServiceProcess {
         ResultTask.Result<?> methodResult = new ResultTask.Result<>();
         Object methodResultObj = packetData.argsInfo.getData(0);;
 
-        if(methodResultObj == null) {
-            methodResultObj = bundle.getParcelable(ProcessConst.KEY_EXTRA_DATA);
+        if(methodResultObj == null || methodResultObj.equals(ProcessConst.KEY_PARCEL_REPLACED)) {
+            methodResultObj = bundle.getParcelable(ProcessConst.KEY_EXTRA_PARCEL_DATA);
         }
 
         methodResult.setSuccess(methodResultObj != null);
@@ -109,7 +120,7 @@ public class LocateProcessor extends ServiceProcess {
     @Override
     public Class<?> getNativeImplClass() {
         try {
-            return Class.forName(String.format("%s.wrapper.%s.LocateNativeWrapper", ProcessConst.PACKAGE_MODULE, getType()));
+            return Class.forName(String.format("%s.wrapper.%s.%sNativeWrapper", ProcessConst.PACKAGE_MODULE, getType(), "Locate"));
         } catch (ClassNotFoundException e) {
             return null;
         }

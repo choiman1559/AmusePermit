@@ -2,10 +2,13 @@ package com.amuse.permit.process.action;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Parcelable;
 
 import com.amuse.permit.data.ArgsInfo;
 import com.amuse.permit.data.PacketData;
 import com.amuse.permit.process.ProcessConst;
+
+import java.util.ArrayList;
 
 public class ClientAction extends ActionBuilder {
 
@@ -43,6 +46,17 @@ public class ClientAction extends ActionBuilder {
 
         setBundle(extras);
         setArgs(argsInfo);
+        return this;
+    }
+
+    public ClientAction pushMethod(String apiType, ArgsInfo argsInfo, ArrayList<Parcelable> parcelableList) {
+        Bundle extras = new Bundle();
+        extras.putString(ProcessConst.KEY_API_TYPE, apiType);
+        extras.putString(ProcessConst.KEY_ACTION_TYPE, ProcessConst.ACTION_REQUEST_METHOD);
+
+        setBundle(extras);
+        setArgs(argsInfo);
+        setParcelable(parcelableList);
         return this;
     }
 

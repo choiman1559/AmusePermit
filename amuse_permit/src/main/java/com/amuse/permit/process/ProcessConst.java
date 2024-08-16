@@ -34,6 +34,11 @@ public class ProcessConst {
     public static final String KEY_STREAM_KEY = "key_stream_key";
     public static final String KEY_TICKET_ID = "key_ticket_id";
 
+    public static final String KEY_PARCEL_REPLACED = "key_parcel_replaced";
+    public static final String KEY_PARCEL_LIST_REPLACED = "key_parcel_list_replaced";
+    public static final String KEY_EXTRA_PARCEL_DATA = "key_extra_parcel_data";
+    public static final String KEY_EXTRA_PARCEL_LIST_DATA = "key_extra_parcel_list_data";
+
     public static final String STREAM_KEY_PREFIX = "stream_%s_%s";
     public static final String STREAM_INPUT = "input";
     public static final String STREAM_OUTPUT = "output";

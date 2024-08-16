@@ -2,6 +2,7 @@ package com.amuse.permit.wrapper.locate;
 
 import android.content.Context;
 import android.location.Location;
+import android.os.Parcelable;
 
 import com.amuse.permit.Instance;
 import com.amuse.permit.data.ArgsInfo;
@@ -14,8 +15,7 @@ import com.amuse.permit.process.action.ResultCreator;
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import java.io.Serializable;
-
+@Annotations.RequesterSide
 @SuppressWarnings("unused")
 public class FusedLocationClient extends LocateModel {
 
@@ -70,15 +70,18 @@ public class FusedLocationClient extends LocateModel {
         ArgsInfo argsInfo = new ArgsInfo();
         String ticket = String.format("%s@%s", methodName, System.currentTimeMillis());
 
-        LocateModel locateModel = new LocateModel();
-        locateModel.mockLocation = mockLocation;
-        locateModel.isMock = isMock;
-
-        argsInfo.put(locateModel);
+        packet.parcelableList.add(mockLocation);
+        argsInfo.put(Location.class, ProcessConst.KEY_PARCEL_REPLACED);
+        argsInfo.put(isMock);
         argsInfo.put(parameterCls, methodName);
 
         for(Object arg : args) {
-            argsInfo.put(arg);
+            if(arg instanceof Parcelable) {
+                argsInfo.put(arg.getClass(), ProcessConst.KEY_PARCEL_REPLACED);
+                packet.parcelableList.add((Parcelable) arg);
+            } else {
+                argsInfo.put(arg);
+            }
         }
 
         packet.argsInfo = argsInfo;

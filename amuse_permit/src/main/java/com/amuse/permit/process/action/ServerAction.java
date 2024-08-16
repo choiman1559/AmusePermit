@@ -10,6 +10,8 @@ import com.amuse.permit.data.PacketData;
 import com.amuse.permit.model.Wrappable;
 import com.amuse.permit.process.ProcessConst;
 
+import java.util.ArrayList;
+
 public class ServerAction extends ActionBuilder {
 
     public ServerAction(Context context, PacketData packetData) {
@@ -81,7 +83,21 @@ public class ServerAction extends ActionBuilder {
         extras.putString(ProcessConst.KEY_ACTION_TYPE, ProcessConst.ACTION_RESPONSE_METHOD);
 
         ArgsInfo argsInfo = new ArgsInfo();
-        argsInfo.put(parcelable.getClass(), null);
+        argsInfo.put(parcelable.getClass(), ProcessConst.KEY_PARCEL_REPLACED);
+
+        setBundle(extras);
+        setArgs(argsInfo);
+        setParcelable(parcelable);
+        return this;
+    }
+
+    public ServerAction pushMethod(String apiType, ArrayList<Parcelable> parcelable) {
+        Bundle extras = new Bundle();
+        extras.putString(ProcessConst.KEY_API_TYPE, apiType);
+        extras.putString(ProcessConst.KEY_ACTION_TYPE, ProcessConst.ACTION_RESPONSE_METHOD);
+
+        ArgsInfo argsInfo = new ArgsInfo();
+        argsInfo.put(parcelable.getClass(), ProcessConst.KEY_PARCEL_LIST_REPLACED);
 
         setBundle(extras);
         setArgs(argsInfo);

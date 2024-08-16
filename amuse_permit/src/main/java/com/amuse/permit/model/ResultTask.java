@@ -1,12 +1,12 @@
 package com.amuse.permit.model;
 
 @SuppressWarnings("unused")
-public class ResultTask<T> {
-    public static class Result<T> {
+public class ResultTask<TResult> {
+    public static class Result<TResult> {
         boolean isSuccess;
         boolean hasException;
         Exception exception;
-        T resultData;
+        TResult resultData;
         Class<?> resultClass;
 
         public boolean isSuccess() {
@@ -17,7 +17,7 @@ public class ResultTask<T> {
             return hasException;
         }
 
-        public T getResultData() {
+        public TResult getResultData() {
             return resultData;
         }
 
@@ -39,7 +39,7 @@ public class ResultTask<T> {
 
         @SuppressWarnings("unchecked")
         public void setResultData(Object resultData) {
-            this.resultData = (T) resultData;
+            this.resultData = (TResult) resultData;
         }
     }
 
@@ -50,7 +50,7 @@ public class ResultTask<T> {
     public ResultTask.onTaskCompleteListener mOnInvokeAttached;
     protected ResultTask.onTaskCompleteListener mOnTaskCompleteListener;
 
-    public ResultTask<T> setOnTaskCompleteListener(onTaskCompleteListener mOnTaskCompleteListener) {
+    public ResultTask<TResult> setOnTaskCompleteListener(onTaskCompleteListener mOnTaskCompleteListener) {
         this.mOnTaskCompleteListener = mOnTaskCompleteListener;
         return this;
     }

@@ -12,6 +12,7 @@ import com.amuse.permit.data.PacketData;
 import com.amuse.permit.process.ProcessConst;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 public class ActionBuilder {
 
@@ -62,7 +63,7 @@ public class ActionBuilder {
     }
 
     public ActionBuilder setArgs(ArgsInfo argsInfo) {
-        intent.putExtra(ProcessConst.KEY_ARGS, (Serializable) argsInfo);
+        intent.putExtra(ProcessConst.KEY_ARGS, argsInfo);
         return this;
     }
 
@@ -71,8 +72,13 @@ public class ActionBuilder {
         return this;
     }
 
+    public ActionBuilder setParcelable(ArrayList<Parcelable> parcelable) {
+        intent.putParcelableArrayListExtra(ProcessConst.KEY_EXTRA_PARCEL_LIST_DATA, parcelable);
+        return this;
+    }
+
     public ActionBuilder setParcelable(Parcelable parcelable) {
-        intent.putExtra(ProcessConst.KEY_EXTRA_DATA, parcelable);
+        intent.putExtra(ProcessConst.KEY_EXTRA_PARCEL_DATA, parcelable);
         return this;
     }
 
