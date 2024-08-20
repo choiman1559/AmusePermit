@@ -15,9 +15,11 @@ import com.amuse.permit.process.ProcessConst;
 import com.amuse.permit.process.action.ServerAction;
 
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 
 public class PackageProcess extends ServiceProcess {
 
+    @SuppressWarnings("unchecked")
     @Override
     public void onMethodRequested(Context context) throws Exception {
         PacketData packetData = getPacketData();
@@ -54,7 +56,11 @@ public class PackageProcess extends ServiceProcess {
                         resultObj = method.invoke(locateModel);
                     }
 
-                    if(resultObj instanceof Parcelable) {
+                    if(resultObj instanceof ArrayList) {
+                        new ServerAction(context, packetData)
+                                .pushMethod(getType(), (ArrayList<Parcelable>) resultObj)
+                                .send();
+                    } else if(resultObj instanceof Parcelable) {
                         new ServerAction(context, packetData)
                                 .pushMethod(getType(), (Parcelable) resultObj)
                                 .send();
