@@ -61,12 +61,20 @@ public class ClientAction extends ActionBuilder {
     }
 
     public ClientAction pushStream(String apiType, ArgsInfo argsInfo) {
+        return pushStream(apiType, argsInfo, null);
+    }
+
+    public ClientAction pushStream(String apiType, ArgsInfo argsInfo, ArrayList<Parcelable> parcelableList) {
         Bundle extras = new Bundle();
         extras.putString(ProcessConst.KEY_API_TYPE, apiType);
         extras.putString(ProcessConst.KEY_ACTION_TYPE, ProcessConst.ACTION_REQUEST_STREAM);
 
         setBundle(extras);
         setArgs(argsInfo);
+
+        if(parcelableList != null) {
+            setParcelable(parcelableList);
+        }
         return this;
     }
 }

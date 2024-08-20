@@ -7,6 +7,7 @@ import android.os.Bundle;
 
 import com.amuse.permit.data.ArgsInfo;
 import com.amuse.permit.data.PacketData;
+import com.amuse.permit.model.Annotations;
 import com.amuse.permit.model.ResultTask;
 import com.amuse.permit.process.ServiceProcess;
 import com.amuse.permit.process.ProcessConst;
@@ -100,6 +101,7 @@ public class FileProcessor extends ServiceProcess {
         ProcessRoute.callInnerResultTask(packetData.ticketId, methodResult);
     }
 
+    @SuppressWarnings("IOStreamConstructor")
     @Override
     public void onStreamRequested(Context context) throws Exception {
         PacketData packetData = getPacketData();
@@ -119,7 +121,7 @@ public class FileProcessor extends ServiceProcess {
     @Override
     public void onStreamResponded(Context context, Bundle bundle) throws Exception {
         PacketData packetData = getPacketData();
-        Uri fileUri = Uri.parse(String.format("content://%s$%s/%s", ProcessConst.PACKAGE_STREAM, packetData.fromPackageName, packetData.ticketId));
+        Uri fileUri = Uri.parse(String.format(ProcessConst.STREAM_AUTH_URI, ProcessConst.PACKAGE_STREAM, packetData.fromPackageName, packetData.ticketId));
         ContentResolver contentResolver = context.getContentResolver();
         Boolean isInputStream = (Boolean) packetData.argsInfo.getData(1);
 
@@ -139,16 +141,12 @@ public class FileProcessor extends ServiceProcess {
     }
 
     @Override
-    public String getType() {
+    public @Annotations.ApiTypes String getType() {
         return ProcessConst.ACTION_TYPE_FILE;
     }
 
     @Override
     public Class<?> getNativeImplClass() {
-        try {
-            return Class.forName(String.format("%s.wrapper.%s.%sNativeWrapper", ProcessConst.PACKAGE_MODULE, getType(), "File"));
-        } catch (ClassNotFoundException e) {
-            return null;
-        }
+        return getDefaultNativeClass("File");
     }
 }

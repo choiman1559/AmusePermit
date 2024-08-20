@@ -15,14 +15,12 @@ import com.amuse.permit.model.Wrappable;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.tasks.CancellationTokenSource;
 
 @SuppressWarnings("unused")
 @SuppressLint("MissingPermission")
 public class LocateNativeWrapper extends LocateModel {
 
-
-    private static FusedLocationProviderClient fusedLocationProviderClient;
+    protected static FusedLocationProviderClient fusedLocationProviderClient;
 
     public LocateNativeWrapper() {
         //For dynamic instance creation
@@ -35,7 +33,7 @@ public class LocateNativeWrapper extends LocateModel {
         resultTask.mOnInvokeAttached = result -> new Thread(() -> {
             Handler handler = new Handler(Looper.getMainLooper());
             handler.post(() -> {
-                ResultTask.Result<Void> voidResult = new ResultTask.Result<>();
+                ResultTask.Result<Wrappable> voidResult = new ResultTask.Result<>();
                 if(fusedLocationProviderClient == null) {
                     fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(context);
                     LocateModel locationModel = (LocateModel) packetData.getData(0);
@@ -112,22 +110,7 @@ public class LocateNativeWrapper extends LocateModel {
 
     @Annotations.ResponserSide
     public ResultTask<Location> getCurrentLocation(Integer priority) {
-        ResultTask<Location> resultTask = new ResultTask<>();
-        ResultTask.Result<Location> voidResult = new ResultTask.Result<>();
-
-        resultTask.mOnInvokeAttached = result -> {
-            if(fusedLocationProviderClient != null) {
-                fusedLocationProviderClient.getCurrentLocation(priority, new CancellationTokenSource().getToken()).addOnCompleteListener(result1 -> {
-                    voidResult.setSuccess(result1.isSuccessful());
-                    voidResult.setResultData(result1.getResult());
-                    resultTask.callCompleteListener(voidResult);
-                });
-            } else {
-                voidResult.setSuccess(false);
-                resultTask.callCompleteListener(voidResult);
-            }
-        };
-        return resultTask;
+        return LocateWork.runWorker(priority);
     }
 
     @Annotations.ResponserSide

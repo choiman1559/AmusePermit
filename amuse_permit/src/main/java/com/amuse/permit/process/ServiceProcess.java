@@ -3,6 +3,8 @@ package com.amuse.permit.process;
 import android.content.Context;
 import android.os.Bundle;
 
+import androidx.annotation.Nullable;
+
 import com.amuse.permit.Instance;
 import com.amuse.permit.data.ArgsInfo;
 import com.amuse.permit.data.PacketData;
@@ -185,13 +187,22 @@ public abstract class ServiceProcess implements Processable {
                 .convertValue(wrapper, targetClass);
     }
 
-    public PacketData getPacketData() {
+    public final PacketData getPacketData() {
         return packetData;
     }
 
     public void checkWrappablePermissionGranted(Context context, Wrappable wrappable) throws Exception {
         if(!wrappable.checkPermissionGranted(context)) {
             throw new IllegalStateException("Wrappable permission is not granted");
+        }
+    }
+
+    @Nullable
+    public final Class<?> getDefaultNativeClass(String classNamePrefix) {
+        try {
+            return Class.forName(String.format("%s.wrapper.%s.%sNativeWrapper", ProcessConst.PACKAGE_MODULE, getType(), classNamePrefix));
+        } catch (ClassNotFoundException e) {
+            return null;
         }
     }
 }

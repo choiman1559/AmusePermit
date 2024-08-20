@@ -7,6 +7,7 @@ import android.os.Parcelable;
 
 import com.amuse.permit.data.ArgsInfo;
 import com.amuse.permit.data.PacketData;
+import com.amuse.permit.model.Annotations;
 import com.amuse.permit.model.ResultTask;
 import com.amuse.permit.model.Wrappable;
 import com.amuse.permit.process.ProcessRoute;
@@ -99,7 +100,7 @@ public class LocateProcessor extends ServiceProcess {
     public void onMethodResponded(Context context, Bundle bundle) {
         PacketData packetData = getPacketData();
         ResultTask.Result<?> methodResult = new ResultTask.Result<>();
-        Object methodResultObj = packetData.argsInfo.getData(0);;
+        Object methodResultObj = packetData.argsInfo.getData(0);
 
         if(methodResultObj == null || methodResultObj.equals(ProcessConst.KEY_PARCEL_REPLACED)) {
             methodResultObj = bundle.getParcelable(ProcessConst.KEY_EXTRA_PARCEL_DATA);
@@ -113,16 +114,12 @@ public class LocateProcessor extends ServiceProcess {
     }
 
     @Override
-    public String getType() {
+    public @Annotations.ApiTypes String getType() {
         return ProcessConst.ACTION_TYPE_LOCATION;
     }
 
     @Override
     public Class<?> getNativeImplClass() {
-        try {
-            return Class.forName(String.format("%s.wrapper.%s.%sNativeWrapper", ProcessConst.PACKAGE_MODULE, getType(), "Locate"));
-        } catch (ClassNotFoundException e) {
-            return null;
-        }
+        return getDefaultNativeClass("Locate");
     }
 }

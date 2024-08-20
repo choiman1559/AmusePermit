@@ -25,7 +25,7 @@ import java.util.List;
 
 @Annotations.RequesterSide
 @SuppressWarnings("unused")
-public class PackageManager {
+public class PackageManager extends QueryPkgModel {
 
     @JsonIgnore
     private Context context;

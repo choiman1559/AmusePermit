@@ -12,6 +12,8 @@ public class ProcessConst {
     public static final String ACTION_TYPE_LOCATION = "locate";
     public static final String ACTION_TYPE_PACKAGE = "pkg";
     public static final String ACTION_TYPE_TELEPHONY = "telephony";
+    public static final String ACTION_TYPE_SMS = "sms";
+    public static final String ACTION_TYPE_CURSOR = "cursor";
 
     public static final String ACTION_REQUEST_CLASS = "action_request_class";
     public static final String ACTION_REQUEST_METHOD = "action_request_method";
@@ -42,4 +44,5 @@ public class ProcessConst {
     public static final String STREAM_KEY_PREFIX = "stream_%s_%s";
     public static final String STREAM_INPUT = "input";
     public static final String STREAM_OUTPUT = "output";
+    public static final String STREAM_AUTH_URI = "content://%s$%s/%s";
 }

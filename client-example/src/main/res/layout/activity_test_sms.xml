@@ -4,13 +4,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginHorizontal="16dp"
-    android:layout_marginVertical="16dp"
     tools:ignore="HardcodedText">
 
     <androidx.appcompat.widget.LinearLayoutCompat
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginVertical="16dp"
         android:orientation="vertical">
 
         <TextView
@@ -18,103 +18,103 @@
             android:layout_height="wrap_content"
             android:textSize="16sp"
             android:textColor="@color/material_dynamic_neutral0"
-            android:text="Server Peer Setup"/>
+            android:text="Phone Info"/>
 
         <EditText
-            android:id="@+id/peerPackageName"
+            android:id="@+id/subIdNumber"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Target Server PackageName"
-            android:inputType="text"
+            android:hint="Subscribe ID"
+            android:inputType="number"
             tools:ignore="Autofill" />
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/fetchPeer"
+            android:id="@+id/fetchBasicInfo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textAllCaps="false"
-            android:text="Fetch Server Metadata" />
+            android:text="Fetch SmsManager" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/getLogFromCursor"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAllCaps="false"
+            android:text="Get log from Number (Cursor)" />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="16sp"
-            android:textColor="@color/material_dynamic_neutral0"
-            android:text="Default Provider Packages"/>
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/SelectHeadlessServer"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAllCaps="false"
-                android:text="Headless"
-                android:layout_alignParentStart="true"
-                android:layout_toStartOf="@id/dummyView"
-                android:layout_marginEnd="8dp"/>
-
-            <TextView
-                android:id="@+id/dummyView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true" />
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/SelectHeadfulServer"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAllCaps="false"
-                android:text="Headful"
-                android:layout_marginStart="8dp"
-                android:layout_alignParentEnd="true"
-                android:layout_toEndOf="@id/dummyView"/>
-        </RelativeLayout>
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="16sp"
-            android:textColor="@color/material_dynamic_neutral0"
             android:layout_marginTop="16dp"
-            android:text="Apis Test Menu"/>
+            android:textSize="16sp"
+            android:textColor="@color/material_dynamic_neutral0"
+            android:text="APIs Test"/>
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/fileMenu"
+            android:id="@+id/getSmscAddress"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textAllCaps="false"
-            android:text="File API" />
+            android:text="getSmscAddress" />
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/telephonyMenu"
+            android:id="@+id/getDefaultSmsSubscriptionId"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textAllCaps="false"
-            android:text="Telephony API" />
+            android:text="getDefaultSmsSubscriptionId" />
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/smsMenu"
+            android:id="@+id/getSmsCapacityOnIcc"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textAllCaps="false"
-            android:text="SMS API" />
+            android:text="getSmsCapacityOnIcc" />
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/packageMenu"
+            android:id="@+id/getCarrierConfigValues"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textAllCaps="false"
-            android:text="Package query API" />
+            android:text="getCarrierConfigValues" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:layout_marginTop="16dp"
+            android:textColor="@color/material_dynamic_neutral0"
+            android:text="Sms IO Test"/>
+
+        <EditText
+            android:id="@+id/destNumber"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Dest Number"
+            android:inputType="phone"
+            tools:ignore="Autofill" />
+
+        <EditText
+            android:id="@+id/messageContent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Message Content"
+            android:inputType="textMultiLine"
+            tools:ignore="Autofill" />
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/locationMenu"
+            android:id="@+id/sendTextMessage"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textAllCaps="false"
-            android:text="Geo-Location API" />
+            android:text="sendTextMessage" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/divideMessage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAllCaps="false"
+            android:text="divideMessage" />
 
         <TextView
             android:layout_width="match_parent"
@@ -131,6 +131,5 @@
             android:layout_marginTop="16dp"
             android:textSize="16sp"
             android:text="Result will shown here"/>
-
     </androidx.appcompat.widget.LinearLayoutCompat>
 </androidx.core.widget.NestedScrollView>

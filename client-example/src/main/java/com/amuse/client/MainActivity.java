@@ -16,6 +16,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.amuse.client.tests.FileActivity;
 import com.amuse.client.tests.LocateActivity;
 import com.amuse.client.tests.QueryPkgActivity;
+import com.amuse.client.tests.SmsActivity;
+import com.amuse.client.tests.TelephonyActivity;
 import com.amuse.permit.Instance;
 import com.amuse.permit.data.AppPeer;
 import com.amuse.permit.model.ResultTask;
@@ -46,9 +48,11 @@ public class MainActivity extends AppCompatActivity {
         MaterialButton telephonyMenu = findViewById(R.id.telephonyMenu);
         MaterialButton packageMenu = findViewById(R.id.packageMenu);
         MaterialButton locationMenu = findViewById(R.id.locationMenu);
+        MaterialButton smsMenu = findViewById(R.id.smsMenu);
 
         activeButtonList.add(fileMenu);
         activeButtonList.add(telephonyMenu);
+        activeButtonList.add(smsMenu);
         activeButtonList.add(packageMenu);
         activeButtonList.add(locationMenu);
         setApiButtonsEnabled(false);
@@ -83,10 +87,11 @@ public class MainActivity extends AppCompatActivity {
             return true;
         });
 
-        //TODO: Add activity for other apis
         fileMenu.setOnClickListener((v) -> startActivity(new Intent(this, FileActivity.class)));
         locationMenu.setOnClickListener((v) -> startActivity(new Intent(this, LocateActivity.class)));
         packageMenu.setOnClickListener((v) -> startActivity(new Intent(this, QueryPkgActivity.class)));
+        telephonyMenu.setOnClickListener((v) -> startActivity(new Intent(this, TelephonyActivity.class)));
+        smsMenu.setOnClickListener((v) -> startActivity(new Intent(this, SmsActivity.class)));
     }
 
     void setApiButtonsEnabled(boolean enabled) {

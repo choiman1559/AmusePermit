@@ -1,13 +1,12 @@
 plugins {
-    alias(libs.plugins.android.application)
+    id 'com.android.library'
 }
 
 android {
-    namespace 'com.amuse.permit.headless'
+    namespace 'com.amuse.permit.wrapper.telephony'
     compileSdk 34
 
     defaultConfig {
-        applicationId "com.amuse.permit.headless"
         minSdk 23
         targetSdk 34
         versionCode 1
@@ -30,16 +29,5 @@ android {
 
 dependencies {
     implementation libs.appcompat
-    implementation libs.material
-
     implementation project(":amuse_permit")
-    implementation project(":amuse_permit:wrapper-file")
-    implementation project(":amuse_permit:wrapper-locate")
-    implementation project(":amuse_permit:wrapper-querypkg")
-    implementation project(":amuse_permit:wrapper-sms")
-    implementation project(":amuse_permit:wrapper-telephony")
-
-    testImplementation libs.junit
-    androidTestImplementation libs.ext.junit
-    androidTestImplementation libs.espresso.core
 }

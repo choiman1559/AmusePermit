@@ -4,7 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 
 public interface Processable {
-    String getType();
+    @Annotations.ApiTypes String getType();
     void onPacketReceived(Context context, Bundle bundle) throws Exception;
     Class<?> getNativeImplClass();
 }

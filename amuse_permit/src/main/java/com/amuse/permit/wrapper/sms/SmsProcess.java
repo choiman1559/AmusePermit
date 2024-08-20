@@ -1,4 +1,4 @@
-package com.amuse.permit.wrapper.pkg;
+package com.amuse.permit.wrapper.sms;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -9,29 +9,31 @@ import com.amuse.permit.data.PacketData;
 import com.amuse.permit.model.Annotations;
 import com.amuse.permit.model.ResultTask;
 import com.amuse.permit.model.Wrappable;
+import com.amuse.permit.process.ProcessConst;
 import com.amuse.permit.process.ProcessRoute;
 import com.amuse.permit.process.ServiceProcess;
-import com.amuse.permit.process.ProcessConst;
 import com.amuse.permit.process.action.ServerAction;
 
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 
-public class PackageProcess extends ServiceProcess {
+public class SmsProcess extends ServiceProcess {
 
+    @SuppressWarnings("unchecked")
     @Override
     public void onMethodRequested(Context context) throws Exception {
         PacketData packetData = getPacketData();
         ArgsInfo argsInfo = packetData.argsInfo;
-        ResultTask<Wrappable> locateModelTask = ((QueryPkgModel) getNativeImplClass().newInstance()).createServerInstance(context, argsInfo);
+        ResultTask<Wrappable> locateModelTask = ((SmsTokenModel) getNativeImplClass().newInstance()).createServerInstance(context, argsInfo);
 
         locateModelTask.setOnTaskCompleteListener(result -> {
             try {
                 if(result.isSuccess()) {
-                    final int methodMetaDataIndex = 0;
+                    final int methodMetaDataIndex = 1;
                     final int methodMetaCorrelationIndex = methodMetaDataIndex + 1;
                     int parcelableCount = 0;
 
-                    QueryPkgModel locateModel = (QueryPkgModel) result.getResultData();
+                    SmsTokenModel smsModel = (SmsTokenModel) result.getResultData();
                     Class<?>[] clsArr = new Class<?>[packetData.argsInfo.size() - methodMetaCorrelationIndex];
                     Object[] argsArr = new Object[packetData.argsInfo.size() - methodMetaCorrelationIndex];
 
@@ -39,7 +41,7 @@ public class PackageProcess extends ServiceProcess {
                         clsArr[i] = packetData.argsInfo.getCls(i + methodMetaCorrelationIndex);
                         argsArr[i] = packetData.argsInfo.getData(i + methodMetaCorrelationIndex);
 
-                        if(argsArr[i].equals(ProcessConst.KEY_PARCEL_REPLACED)) {
+                        if(argsArr[i] != null && argsArr[i].equals(ProcessConst.KEY_PARCEL_REPLACED)) {
                             argsArr[i] = packetData.parcelableList.get(parcelableCount);
                             parcelableCount += 1;
                         }
@@ -48,13 +50,17 @@ public class PackageProcess extends ServiceProcess {
                     Object resultObj;
                     if(clsArr.length > 0) {
                         Method method = getNativeImplClass().getDeclaredMethod((String) packetData.argsInfo.getData(methodMetaDataIndex), clsArr);
-                        resultObj = method.invoke(locateModel, argsArr);
+                        resultObj = method.invoke(smsModel, argsArr);
                     } else {
                         Method method = getNativeImplClass().getDeclaredMethod((String) packetData.argsInfo.getData(methodMetaDataIndex));
-                        resultObj = method.invoke(locateModel);
+                        resultObj = method.invoke(smsModel);
                     }
 
-                    if(resultObj instanceof Parcelable) {
+                    if(resultObj instanceof ArrayList) {
+                        new ServerAction(context, packetData)
+                                .pushMethod(getType(), (ArrayList<Parcelable>) resultObj)
+                                .send();
+                    } else if(resultObj instanceof Parcelable) {
                         new ServerAction(context, packetData)
                                 .pushMethod(getType(), (Parcelable) resultObj)
                                 .send();
@@ -85,35 +91,28 @@ public class PackageProcess extends ServiceProcess {
         ResultTask.Result<?> methodResult = new ResultTask.Result<>();
         Object methodResultObj = packetData.argsInfo.getData(0);
 
-        if (methodResultObj.equals(ProcessConst.KEY_PARCEL_REPLACED)) {
-            methodResultObj = bundle.getParcelable(ProcessConst.KEY_EXTRA_PARCEL_DATA);
-        } else if (methodResultObj.equals(ProcessConst.KEY_PARCEL_LIST_REPLACED)) {
-            methodResultObj = bundle.getParcelableArrayList(ProcessConst.KEY_EXTRA_PARCEL_LIST_DATA);
+        if(methodResultObj != null) {
+            if (methodResultObj.equals(ProcessConst.KEY_PARCEL_REPLACED)) {
+                methodResultObj = bundle.getParcelable(ProcessConst.KEY_EXTRA_PARCEL_DATA);
+            } else if (methodResultObj.equals(ProcessConst.KEY_PARCEL_LIST_REPLACED)) {
+                methodResultObj = bundle.getParcelableArrayList(ProcessConst.KEY_EXTRA_PARCEL_LIST_DATA);
+            }
         }
 
-        if(packetData.argsInfo.getCls(0) == Void.class) {
-            methodResult.setSuccess(true);
-        } else {
-            methodResult.setSuccess(methodResultObj != null);
-            methodResult.setResultData(packetData.argsInfo.getCls(0).cast(methodResultObj));
-        }
-
+        methodResult.setSuccess(packetData.argsInfo.getCls(0) == Void.class || methodResultObj != null);
+        methodResult.setResultData(packetData.argsInfo.getCls(0).cast(methodResultObj));
         methodResult.setHasException(false);
+
         ProcessRoute.callInnerResultTask(packetData.ticketId, methodResult);
     }
 
     @Override
     public @Annotations.ApiTypes String getType() {
-        return ProcessConst.ACTION_TYPE_PACKAGE;
-    }
-
-    @Override
-    public void onPacketReceived(Context context, Bundle bundle) throws Exception {
-        super.onPacketReceived(context, bundle);
+        return ProcessConst.ACTION_TYPE_SMS;
     }
 
     @Override
     public Class<?> getNativeImplClass() {
-        return getDefaultNativeClass("QueryPkg");
+        return getDefaultNativeClass("Sms");
     }
 }

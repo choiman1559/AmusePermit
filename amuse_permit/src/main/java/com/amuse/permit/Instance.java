@@ -14,9 +14,11 @@ import com.amuse.permit.model.Annotations;
 import com.amuse.permit.model.NameFilters;
 import com.amuse.permit.model.Processable;
 import com.amuse.permit.process.ProcessConst;
+import com.amuse.permit.wrapper.cursor.CursorProcess;
 import com.amuse.permit.wrapper.file.FileProcessor;
 import com.amuse.permit.wrapper.locate.LocateProcessor;
 import com.amuse.permit.wrapper.pkg.PackageProcess;
+import com.amuse.permit.wrapper.sms.SmsProcess;
 import com.amuse.permit.wrapper.telephony.TelephonyProcess;
 
 import java.util.ArrayList;
@@ -69,6 +71,8 @@ public class Instance {
         addService(LocateProcessor.class);
         addService(PackageProcess.class);
         addService(TelephonyProcess.class);
+        addService(CursorProcess.class);
+        addService(SmsProcess.class);
     }
 
     public static Instance getInstance() {

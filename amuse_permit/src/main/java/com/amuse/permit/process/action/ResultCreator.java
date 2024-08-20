@@ -27,7 +27,11 @@ public class ResultCreator<T> {
             ClientAction clientAction = new ClientAction(context, packetData);
 
             if(this.isStream) {
-                clientAction.pushStream(packetData.apiType, packetData.argsInfo);
+                if(packetData.parcelableList != null) {
+                    clientAction.pushStream(packetData.apiType, packetData.argsInfo, packetData.parcelableList);
+                } else {
+                    clientAction.pushStream(packetData.apiType, packetData.argsInfo);
+                }
             } else if (this.packetData.parcelableList != null) {
                 clientAction.pushMethod(packetData.apiType, packetData.argsInfo, packetData.parcelableList);
             } else {

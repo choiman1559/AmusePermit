@@ -37,6 +37,6 @@ public class Annotations {
 
     @Retention(RetentionPolicy.SOURCE)
     @Target({ElementType.TYPE_USE, ElementType.PARAMETER, ElementType.TYPE})
-    @StringDef({ProcessConst.ACTION_TYPE_FILE, ProcessConst.ACTION_TYPE_LOCATION, ProcessConst.ACTION_TYPE_PACKAGE, ProcessConst.ACTION_TYPE_TELEPHONY})
+    @StringDef({ProcessConst.ACTION_TYPE_FILE, ProcessConst.ACTION_TYPE_LOCATION, ProcessConst.ACTION_TYPE_PACKAGE, ProcessConst.ACTION_TYPE_TELEPHONY, ProcessConst.ACTION_TYPE_SMS, ProcessConst.ACTION_TYPE_CURSOR})
     public @interface ApiTypes { }
 }

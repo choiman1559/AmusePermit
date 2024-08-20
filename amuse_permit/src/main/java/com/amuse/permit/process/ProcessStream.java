@@ -2,6 +2,7 @@ package com.amuse.permit.process;
 
 import android.content.ContentProvider;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.UriMatcher;
 import android.database.Cursor;
 import android.net.Uri;
@@ -21,8 +22,9 @@ public class ProcessStream extends ContentProvider {
 
     public static final HashMap<String, InputStream> inputStreamMap = new HashMap<>();
     public static final HashMap<String, OutputStream> outputStreamMap = new HashMap<>();
+    public static final HashMap<String, Object[]> queryUriMap = new HashMap<>();
 
-    private static final int FILE = 1;
+    private static final int ALLOW = 1;
     private static UriMatcher uriMatcher;
 
     @Override
@@ -36,7 +38,7 @@ public class ProcessStream extends ContentProvider {
             String AUTHORITY = String.format("%s$%s", ProcessConst.PACKAGE_STREAM, instance.getAppPackageName());
 
             uriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
-            uriMatcher.addURI(AUTHORITY, "*", FILE);
+            uriMatcher.addURI(AUTHORITY, "*", ALLOW);
         }
     }
 
@@ -44,7 +46,7 @@ public class ProcessStream extends ContentProvider {
     public ParcelFileDescriptor openFile(@NonNull Uri uri, @NonNull String mode) throws FileNotFoundException {
         initializeUriMatcher();
         int match = uriMatcher.match(uri);
-        if (match != FILE) {
+        if (match != ALLOW) {
             throw new FileNotFoundException("Unsupported URI: " + uri);
         }
 
@@ -155,7 +157,23 @@ public class ProcessStream extends ContentProvider {
 
     @Override
     public Cursor query(@NonNull Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
-        throw new UnsupportedOperationException("Not yet implemented");
+        initializeUriMatcher();
+        int match = uriMatcher.match(uri);
+        if (match != ALLOW) {
+            return null;
+        }
+
+        String[] ipcChannelUri = uri.toString().split("/");
+        String ipcChannelName = ipcChannelUri[ipcChannelUri.length - 1];
+        Object[] objects = queryUriMap.get(ipcChannelName);
+
+        if(queryUriMap.containsKey(ipcChannelName) && objects != null) {
+            queryUriMap.remove(ipcChannelName);
+            Context context = (Context) objects[0];
+            Uri finalUri = (Uri) objects[1];
+            return context.getContentResolver().query(finalUri, projection, selection, selectionArgs, sortOrder);
+        }
+        return null;
     }
 
     @Override
