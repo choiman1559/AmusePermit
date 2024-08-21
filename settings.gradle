@@ -21,8 +21,8 @@ dependencyResolutionManagement {
 
 rootProject.name = "AmusePermit"
 include ':amuse_permit'
-include ':headful'
-include ':headless'
+include ':benchmark-server'
+include ':server-example'
 include ':client-example'
 include ':amuse_permit:wrapper-file'
 include ':amuse_permit:wrapper-locate'

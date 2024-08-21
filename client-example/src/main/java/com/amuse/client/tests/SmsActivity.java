@@ -25,6 +25,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.android.material.button.MaterialButton;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class SmsActivity extends AppCompatActivity {
 
@@ -36,7 +37,7 @@ public class SmsActivity extends AppCompatActivity {
     ContentObserver observer = new ContentObserver() {
         @Override
         public void onChange(Boolean isSelfChanged, Uri uri) {
-            String message = String.format("Observer => Uri: %s", uri.toString());
+            String message = String.format("Observer => Uri: %s", Objects.requireNonNullElse(uri, "null"));
             Log.d("Observer_OnChange", message);
             Toast.makeText(SmsActivity.this, message, Toast.LENGTH_SHORT).show();
         }

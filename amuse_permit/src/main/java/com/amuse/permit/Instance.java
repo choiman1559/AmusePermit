@@ -27,13 +27,6 @@ import java.util.List;
 
 @SuppressWarnings("unused")
 public class Instance {
-    /***
-     * Have to Implement these API wrappers
-     * • SMS & Phone Call State
-     * • Geo FusedLocationClient
-     * • File I/O
-     * • Package Query & Management
-     */
 
     public static final int OPERATE_MODE_SERVER = 1;
     public static final int OPERATE_MODE_CLIENT = 2;

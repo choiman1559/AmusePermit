@@ -2,6 +2,8 @@ package com.amuse.permit.wrapper.cursor;
 
 import android.net.Uri;
 
+import androidx.annotation.Nullable;
+
 @SuppressWarnings("unused")
 public abstract class ContentObserver {
 
@@ -11,7 +13,7 @@ public abstract class ContentObserver {
 
     }
 
-    public void onChange(Boolean isSelfChanged, Uri uri) {
+    public void onChange(Boolean isSelfChanged, @Nullable Uri uri) {
 
     }
 }

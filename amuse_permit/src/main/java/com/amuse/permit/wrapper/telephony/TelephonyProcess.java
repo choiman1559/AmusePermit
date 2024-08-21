@@ -9,7 +9,15 @@ import com.amuse.permit.process.ProcessConst;
 
 public class TelephonyProcess extends ServiceProcess {
 
+    @Override
+    public void onMethodRequested(Context context) throws Exception {
+        super.onMethodRequested(context);
+    }
 
+    @Override
+    public void onMethodResponded(Context context, Bundle bundle) throws Exception {
+        super.onMethodResponded(context, bundle);
+    }
 
     @Override
     public @Annotations.ApiTypes String getType() {

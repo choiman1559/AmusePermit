@@ -64,9 +64,12 @@ public class ProviderManager extends Wrappable {
         ResultTask<Void> resultTask = new ResultTask<>();
         resultTask.mOnInvokeAttached = result -> {
             ResultTask.Result<Void> cursorResult = new ResultTask.Result<>();
-            PacketData packetData = buildStreamCallPacketData(REGISTER_OBSERVER, Boolean.class, uri, notifyForDescendants);
-            ResultTask<Void> registerTask = new ResultCreator<Void>(packetData, true).postMethodProcess(context);
+            PacketData packetData = buildStreamCallPacketData(REGISTER_OBSERVER, Void.class, uri, notifyForDescendants);
+            if(registerContentObserver.ticketId != null && !registerContentObserver.ticketId.isEmpty()) {
+                packetData.ticketId = registerContentObserver.ticketId;
+            }
 
+            ResultTask<Void> registerTask = new ResultCreator<Void>(packetData, true).postMethodProcess(context);
             registerTask.setOnTaskCompleteListener(registerTaskResult -> {
                 cursorResult.setSuccess(registerTaskResult.isSuccess());
                 registerContentObserver.ticketId = packetData.ticketId;
@@ -82,13 +85,14 @@ public class ProviderManager extends Wrappable {
         resultTask.mOnInvokeAttached = result -> {
             ResultTask.Result<Void> cursorResult = new ResultTask.Result<>();
             if(unregisterContentObserver.ticketId == null || unregisterContentObserver.ticketId.isEmpty()) {
-                Instance.printLog("UnregisterContentObserver is not registered to Server");
                 cursorResult.setSuccess(false);
+                cursorResult.setHasException(true);
+                cursorResult.setException(new IllegalArgumentException("UnregisterContentObserver is not registered to Server"));
                 resultTask.callCompleteListener(cursorResult);
                 return;
             }
 
-            PacketData packetData = buildStreamCallPacketData(UNREGISTER_OBSERVER, Boolean.class, unregisterContentObserver.ticketId);
+            PacketData packetData = buildStreamCallPacketData(UNREGISTER_OBSERVER, Void.class, unregisterContentObserver.ticketId);
             ResultTask<Void> registerTask = new ResultCreator<Void>(packetData, true).postMethodProcess(context);
 
             registerTask.setOnTaskCompleteListener(registerTaskResult -> {
@@ -100,7 +104,6 @@ public class ProviderManager extends Wrappable {
         return resultTask;
     }
 
-    @SuppressWarnings("SameParameterValue")
     private PacketData buildStreamCallPacketData(String methodName, Class<?> parameterCls, Object... args) {
         Instance instance = Instance.getInstance();
         PacketData packet = new PacketData();
