@@ -1,9 +1,11 @@
 package com.amuse.client.tests;
 
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Telephony;
+import android.util.Log;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -14,6 +16,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.amuse.client.R;
 import com.amuse.permit.model.ResultTask;
+import com.amuse.permit.wrapper.cursor.ContentObserver;
 import com.amuse.permit.wrapper.cursor.ProviderManager;
 import com.amuse.permit.wrapper.sms.SmsManager;
 
@@ -27,7 +30,17 @@ public class SmsActivity extends AppCompatActivity {
 
     TextView resultTextView;
     ArrayList<MaterialButton> apiButtons = new ArrayList<>();
+
     SmsManager smsManager;
+    ProviderManager providerManager;
+    ContentObserver observer = new ContentObserver() {
+        @Override
+        public void onChange(Boolean isSelfChanged, Uri uri) {
+            String message = String.format("Observer => Uri: %s", uri.toString());
+            Log.d("Observer_OnChange", message);
+            Toast.makeText(SmsActivity.this, message, Toast.LENGTH_SHORT).show();
+        }
+    };
 
     @RequiresApi(api = Build.VERSION_CODES.S)
     @Override
@@ -42,6 +55,8 @@ public class SmsActivity extends AppCompatActivity {
 
         MaterialButton fetchBasicInfo = findViewById(R.id.fetchBasicInfo);
         MaterialButton getLogFromCursor = findViewById(R.id.getLogFromCursor);
+        MaterialButton registerContentObserver = findViewById(R.id.registerContentObserver);
+        MaterialButton unregisterContentObserver = findViewById(R.id.unregisterContentObserver);
 
         MaterialButton getSmscAddress = findViewById(R.id.getSmscAddress);
         MaterialButton getDefaultSmsSubscriptionId = findViewById(R.id.getDefaultSmsSubscriptionId);
@@ -50,6 +65,8 @@ public class SmsActivity extends AppCompatActivity {
         MaterialButton sendTextMessage = findViewById(R.id.sendTextMessage);
         MaterialButton divideMessage = findViewById(R.id.divideMessage);
 
+        apiButtons.add(registerContentObserver);
+        apiButtons.add(unregisterContentObserver);
         apiButtons.add(getLogFromCursor);
         apiButtons.add(getSmscAddress);
         apiButtons.add(getDefaultSmsSubscriptionId);
@@ -62,6 +79,7 @@ public class SmsActivity extends AppCompatActivity {
         fetchBasicInfo.setOnClickListener((v) -> {
             setApiButtonsEnabled(true);
             String subId = subIdNumber.getText().toString().trim();
+            providerManager = ProviderManager.getProviderManager(this);
             if(subId.isEmpty()) {
                 smsManager = SmsManager.getDefaultSmsManager(this);
             } else {
@@ -79,10 +97,11 @@ public class SmsActivity extends AppCompatActivity {
                 messageContent.getText().toString().trim(), null, null
         )));
 
+        registerContentObserver.setOnClickListener((v) -> postApiAction(providerManager.registerContentObserver(Telephony.Sms.CONTENT_URI, true, observer)));
+        unregisterContentObserver.setOnClickListener((v) -> postApiAction(providerManager.unregisterContentObserver(observer)));
         getLogFromCursor.setOnClickListener((v) -> {
             String selector = String.format("address='%s'", destNumber.getText().toString().trim());
-            ResultTask<Cursor> resultTask = ProviderManager.getProviderManager(this)
-                    .query(Telephony.Sms.CONTENT_URI, null, selector, null, null);
+            ResultTask<Cursor> resultTask = providerManager.query(Telephony.Sms.CONTENT_URI, null, selector, null, null);
 
             resultTask.setOnTaskCompleteListener(result -> {
                 Cursor cursor = (Cursor) result.getResultData();

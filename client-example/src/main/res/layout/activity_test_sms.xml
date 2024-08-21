@@ -24,7 +24,7 @@
             android:id="@+id/subIdNumber"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Subscribe ID"
+            android:hint="Subscribe ID (Optional)"
             android:inputType="number"
             tools:ignore="Autofill" />
 
@@ -35,12 +35,34 @@
             android:textAllCaps="false"
             android:text="Fetch SmsManager" />
 
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:layout_marginTop="16dp"
+            android:textColor="@color/material_dynamic_neutral0"
+            android:text="Cursor Test"/>
+
         <com.google.android.material.button.MaterialButton
             android:id="@+id/getLogFromCursor"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textAllCaps="false"
-            android:text="Get log from Number (Cursor)" />
+            android:text="Query log from Number" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/registerContentObserver"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAllCaps="false"
+            android:text="registerContentObserver" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/unregisterContentObserver"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAllCaps="false"
+            android:text="unregisterContentObserver" />
 
         <TextView
             android:layout_width="match_parent"

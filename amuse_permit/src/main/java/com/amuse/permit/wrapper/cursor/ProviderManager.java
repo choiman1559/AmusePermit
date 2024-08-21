@@ -23,6 +23,10 @@ public class ProviderManager extends Wrappable {
 
     @JsonIgnore
     private Context context;
+    protected final static String QUERY = "query";
+    protected final static String REGISTER_OBSERVER = "register_observer";
+    protected final static String UNREGISTER_OBSERVER = "unregister_observer";
+    protected final static String CALL_OBSERVER = "call_observer";
 
     @Annotations.Constructor
     public static ProviderManager getProviderManager(Context context) {
@@ -40,7 +44,7 @@ public class ProviderManager extends Wrappable {
 
         ResultTask<Cursor> resultTask = new ResultTask<>();
         resultTask.mOnInvokeAttached = result -> {
-            PacketData packetData = buildStreamCallPacketData("query", Boolean.class, uri);
+            PacketData packetData = buildStreamCallPacketData(QUERY, Boolean.class, uri);
             ResultTask<Boolean> registerTask = new ResultCreator<Boolean>(packetData, true).postMethodProcess(context);
 
             registerTask.setOnTaskCompleteListener(registerTaskResult -> {
@@ -50,6 +54,46 @@ public class ProviderManager extends Wrappable {
                 Uri registeredUri = Uri.parse(String.format(ProcessConst.STREAM_AUTH_URI, ProcessConst.PACKAGE_STREAM, packetData.fromPackageName, packetData.ticketId));
                 ContentResolver contentResolver = context.getContentResolver();
                 cursorResult.setResultData(contentResolver.query(registeredUri, projection, selection, selectionArgs, sortOrder));
+                resultTask.callCompleteListener(cursorResult);
+            }).invokeTask();
+        };
+        return resultTask;
+    }
+
+    public ResultTask<Void> registerContentObserver(Uri uri, Boolean notifyForDescendants, ContentObserver registerContentObserver) {
+        ResultTask<Void> resultTask = new ResultTask<>();
+        resultTask.mOnInvokeAttached = result -> {
+            ResultTask.Result<Void> cursorResult = new ResultTask.Result<>();
+            PacketData packetData = buildStreamCallPacketData(REGISTER_OBSERVER, Boolean.class, uri, notifyForDescendants);
+            ResultTask<Void> registerTask = new ResultCreator<Void>(packetData, true).postMethodProcess(context);
+
+            registerTask.setOnTaskCompleteListener(registerTaskResult -> {
+                cursorResult.setSuccess(registerTaskResult.isSuccess());
+                registerContentObserver.ticketId = packetData.ticketId;
+                CursorProcess.registerOrRemoveContentObserver(true, registerContentObserver);
+                resultTask.callCompleteListener(cursorResult);
+            }).invokeTask();
+        };
+        return resultTask;
+    }
+
+    public ResultTask<Void> unregisterContentObserver(ContentObserver unregisterContentObserver) {
+        ResultTask<Void> resultTask = new ResultTask<>();
+        resultTask.mOnInvokeAttached = result -> {
+            ResultTask.Result<Void> cursorResult = new ResultTask.Result<>();
+            if(unregisterContentObserver.ticketId == null || unregisterContentObserver.ticketId.isEmpty()) {
+                Instance.printLog("UnregisterContentObserver is not registered to Server");
+                cursorResult.setSuccess(false);
+                resultTask.callCompleteListener(cursorResult);
+                return;
+            }
+
+            PacketData packetData = buildStreamCallPacketData(UNREGISTER_OBSERVER, Boolean.class, unregisterContentObserver.ticketId);
+            ResultTask<Void> registerTask = new ResultCreator<Void>(packetData, true).postMethodProcess(context);
+
+            registerTask.setOnTaskCompleteListener(registerTaskResult -> {
+                cursorResult.setSuccess(registerTaskResult.isSuccess());
+                CursorProcess.registerOrRemoveContentObserver(false, unregisterContentObserver);
                 resultTask.callCompleteListener(cursorResult);
             }).invokeTask();
         };

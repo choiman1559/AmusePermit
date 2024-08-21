@@ -115,4 +115,16 @@ public class ServerAction extends ActionBuilder {
         setArgs(argsInfo);
         return this;
     }
+
+    public ServerAction pushStream(String apiType, ArgsInfo argsInfo, ArrayList<Parcelable> parcelables) {
+        Bundle extras = new Bundle();
+        extras.putString(ProcessConst.KEY_API_TYPE, apiType);
+        extras.putString(ProcessConst.KEY_ACTION_TYPE, ProcessConst.ACTION_RESPONSE_STREAM);
+        extras.putSerializable(ProcessConst.KEY_ARGS, argsInfo);
+
+        setBundle(extras);
+        setArgs(argsInfo);
+        setParcelable(parcelables);
+        return this;
+    }
 }
