@@ -15,7 +15,6 @@ public class NativeFileTest {
     private static final int BUFFER_SIZE = 1024 * 4; // KB
     private static final int FILE_SIZE_SEQUENTIAL = 1024 * 1024 * 1024; // MB
 
-    private static final String FILE_NAME = "benchmark_%s.dat";
     private final Timer timer = new Timer();
     private final Timer latencyTimer = new Timer();
 
