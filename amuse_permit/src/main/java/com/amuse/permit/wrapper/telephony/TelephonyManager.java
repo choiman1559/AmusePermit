@@ -342,6 +342,12 @@ public class TelephonyManager extends Wrappable {
                 includeLocationData)).postMethodProcess(context);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public ResultTask<ServiceState> getServiceState() {
+        return new ResultCreator<ServiceState>(buildMethodCallPacketData("getServiceState"
+                , ServiceState.class)).postMethodProcess(context);
+    }
+
     @RequiresApi(api = Build.VERSION_CODES.P)
     public ResultTask<SignalStrength> getSignalStrength() {
         return new ResultCreator<SignalStrength>(buildMethodCallPacketData("getSignalStrength"
@@ -640,6 +646,7 @@ public class TelephonyManager extends Wrappable {
                 , Boolean.class)).postMethodProcess(context);
     }
 
+    @Deprecated(since = "Replaced to #isDeviceSmsCapable Since Android 15")
     public ResultTask<Boolean> isSmsCapable() {
         return new ResultCreator<Boolean>(buildMethodCallPacketData("isSmsCapable"
                 , Boolean.class)).postMethodProcess(context);

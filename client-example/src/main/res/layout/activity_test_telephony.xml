@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:ignore="HardcodedText">
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginVertical="16dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:textColor="@color/material_dynamic_neutral0"
+            android:text="Phone Info"/>
+
+        <EditText
+            android:id="@+id/subIdNumber"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Subscribe ID (Optional)"
+            android:inputType="number"
+            tools:ignore="Autofill" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/fetchBasicInfo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAllCaps="false"
+            android:text="Fetch TelephonyManager" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:layout_marginTop="16dp"
+            android:textColor="@color/material_dynamic_neutral0"
+            android:text="Cursor Test"/>
+
+        <EditText
+            android:id="@+id/destNumber"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Dest Number"
+            android:inputType="phone"
+            tools:ignore="Autofill" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/getLogFromCursor"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAllCaps="false"
+            android:text="Query log from Number" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/registerContentObserver"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAllCaps="false"
+            android:text="registerContentObserver" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/unregisterContentObserver"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAllCaps="false"
+            android:text="unregisterContentObserver" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:textSize="16sp"
+            android:textColor="@color/material_dynamic_neutral0"
+            android:text="APIs Test"/>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/getServiceState"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAllCaps="false"
+            android:text="getServiceState" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/getLine1Number"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAllCaps="false"
+            android:text="getLine1Number" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/getSignalStrength"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAllCaps="false"
+            android:text="getSignalStrength" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/getAllCellInfo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAllCaps="false"
+            android:text="getAllCellInfo" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:textSize="16sp"
+            android:textColor="@color/material_dynamic_neutral0"
+            android:text="Result Text"/>
+
+        <TextView
+            android:id="@+id/resultTextView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="16dp"
+            android:textSize="16sp"
+            android:text="Result will shown here"/>
+    </androidx.appcompat.widget.LinearLayoutCompat>
+</androidx.core.widget.NestedScrollView>

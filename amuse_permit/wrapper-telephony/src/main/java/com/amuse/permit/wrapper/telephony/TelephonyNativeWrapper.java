@@ -43,11 +43,17 @@ public class TelephonyNativeWrapper extends Wrappable {
             nativeWrapper.context = context;
 
             Class<?> constructorClass = argsInfo.getCls(0);
-            telephonyManager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
+            nativeWrapper.telephonyManager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
             if (constructorClass.equals(Integer.class) && Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                telephonyManager = telephonyManager.createForSubscriptionId((Integer) argsInfo.getData(0));
+                Integer subId = (Integer) argsInfo.getData(0);
+                if(subId != null) {
+                    nativeWrapper.telephonyManager = nativeWrapper.telephonyManager.createForSubscriptionId(subId);
+                }
             } else if (constructorClass.equals(PhoneAccountHandle.class) && Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                telephonyManager = telephonyManager.createForPhoneAccountHandle((PhoneAccountHandle) argsInfo.getData(0));
+                PhoneAccountHandle phoneAccountHandle = (PhoneAccountHandle) argsInfo.getData(0);
+                if(phoneAccountHandle != null) {
+                    nativeWrapper.telephonyManager = nativeWrapper.telephonyManager.createForPhoneAccountHandle(phoneAccountHandle);
+                }
             }
 
             nativeResult.setResultData(nativeWrapper);
@@ -273,6 +279,11 @@ public class TelephonyNativeWrapper extends Wrappable {
     @RequiresApi(api = Build.VERSION_CODES.TIRAMISU)
     public ServiceState getServiceState(Integer includeLocationData) {
         return telephonyManager.getServiceState(includeLocationData);
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public ServiceState getServiceState() {
+        return telephonyManager.getServiceState();
     }
 
     @RequiresApi(api = Build.VERSION_CODES.P)
