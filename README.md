@@ -6,8 +6,23 @@ IPC framework for unifying permissions for Android sensitive APIs
 
 To put it bluntly, to bypass the [Play Store's sensitive permissions policy](https://support.google.com/googleplay/android-developer/answer/9888170?hl=en).
 
-## Getting start
+In detail, Google has recently expanded the regulations and restrictions on the use of sensitive APIs,
+thereby expanding the restrictions on granting permissions for functions that may be necessary for developing apps 
+that access sensitive API information such as files, SMS, and locations.
+In addition, as the SDK version of Android is gradually updated, the implementation specifications for granting access to these sensitive APIs are gradually changing,
+which is expanding fragmentation by SDK version and making the use of these APIs increasingly difficult. 
+This leaves significant difficulties in app development and maintenance, including backward compatibility,
+and therefore this project was developed to integrate and avoid the restrictions that exist in sensitive API permissions to solve these problems.
 
+Hereby this framework allows non-privileged applications (clients) to use privileged sensitive APIs through applications (servers) that have already been granted
+the privilege. It is also designed to be as 1:1 as possible with native APIs, 
+allowing you to use as many APIs as possible with minimal time and effort for migration.
+
+## How It Works?
+Please refer to the paper [here](https://github.com/choiman1559/AmusePermit/raw/master/AmusePermit_Paper_(KR).pdf) </br>
+(Sorry, we only offer Korean language papers at the moment!)
+
+## Getting start
 ### Gradle Settings
 
 First, [Download](https://github.com/choiman1559/AmusePermit/archive/refs/heads/master.zip) repository as zip or clone to your preferred location, and then copy `amuse_permit` directory to your project folder
