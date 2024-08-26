@@ -29,9 +29,9 @@ public class LocateProcessor extends ServiceProcess {
         preProcesslocateModel.isMock = (boolean) argsInfo.getData(1);
         argsInfo.set(0, LocateModel.class, preProcesslocateModel);
 
-        ResultTask<Wrappable> locateModelTask = ((LocateModel) getNativeImplClass().newInstance()).createServerInstance(context, argsInfo);
+        ResultTask<Wrappable> nativeModelTask = ((LocateModel) getNativeImplClass().newInstance()).createServerInstance(context, argsInfo);
 
-        locateModelTask.setOnTaskCompleteListener(result -> {
+        nativeModelTask.setOnTaskCompleteListener(result -> {
             try {
                 if(result.isSuccess()) {
                     LocateModel locateModel = (LocateModel) result.getResultData();

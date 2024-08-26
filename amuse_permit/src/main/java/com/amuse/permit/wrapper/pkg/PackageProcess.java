@@ -24,9 +24,9 @@ public class PackageProcess extends ServiceProcess {
     public void onMethodRequested(Context context) throws Exception {
         PacketData packetData = getPacketData();
         ArgsInfo argsInfo = packetData.argsInfo;
-        ResultTask<Wrappable> locateModelTask = ((QueryPkgModel) getNativeImplClass().newInstance()).createServerInstance(context, argsInfo);
+        ResultTask<Wrappable> nativeModelTask = ((QueryPkgModel) getNativeImplClass().newInstance()).createServerInstance(context, argsInfo);
 
-        locateModelTask.setOnTaskCompleteListener(result -> {
+        nativeModelTask.setOnTaskCompleteListener(result -> {
             try {
                 if(result.isSuccess()) {
                     final int methodMetaDataIndex = 0;

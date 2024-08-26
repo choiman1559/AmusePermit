@@ -24,9 +24,9 @@ public class SmsProcess extends ServiceProcess {
     public void onMethodRequested(Context context) throws Exception {
         PacketData packetData = getPacketData();
         ArgsInfo argsInfo = packetData.argsInfo;
-        ResultTask<Wrappable> locateModelTask = ((SmsTokenModel) getNativeImplClass().newInstance()).createServerInstance(context, argsInfo);
+        ResultTask<Wrappable> nativeModelTask = ((SmsTokenModel) getNativeImplClass().newInstance()).createServerInstance(context, argsInfo);
 
-        locateModelTask.setOnTaskCompleteListener(result -> {
+        nativeModelTask.setOnTaskCompleteListener(result -> {
             try {
                 if(result.isSuccess()) {
                     final int methodMetaDataIndex = 1;

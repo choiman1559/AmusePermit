@@ -29,8 +29,8 @@ public class TelephonyProcess extends ServiceProcess {
             argsInfo.set(0, PhoneAccountHandle.class, packetData.parcelableList.get(0));
         }
 
-        ResultTask<Wrappable> locateModelTask = ((Wrappable) getNativeImplClass().newInstance()).createServerInstance(context, argsInfo);
-        locateModelTask.setOnTaskCompleteListener(result -> {
+        ResultTask<Wrappable> nativeModelTask = ((Wrappable) getNativeImplClass().newInstance()).createServerInstance(context, argsInfo);
+        nativeModelTask.setOnTaskCompleteListener(result -> {
             try {
                 if(result.isSuccess()) {
                     final int methodMetaDataIndex = 1;
