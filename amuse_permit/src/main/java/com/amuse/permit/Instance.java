@@ -168,7 +168,7 @@ public class Instance {
      * @param serverPeer AppPeer instance to designate as server
      */
     public void setServerPeer(AppPeer serverPeer) {
-        if(hasModFlag(OPERATE_MODE_SERVER)) {
+        if(hasModFlag(OPERATE_MODE_CLIENT)) {
             this.serverPeer = serverPeer;
         }
     }
