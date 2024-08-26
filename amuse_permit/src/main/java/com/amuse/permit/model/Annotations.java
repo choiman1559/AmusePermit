@@ -1,7 +1,9 @@
 package com.amuse.permit.model;
 
+import androidx.annotation.IntDef;
 import androidx.annotation.StringDef;
 
+import com.amuse.permit.Instance;
 import com.amuse.permit.process.ProcessConst;
 
 import java.lang.annotation.ElementType;
@@ -34,6 +36,11 @@ public class Annotations {
     @Target({ElementType.METHOD, ElementType.PACKAGE})
     public @interface NativeWrapper {
     }
+
+    @Retention(RetentionPolicy.SOURCE)
+    @Target({ElementType.TYPE_USE, ElementType.PARAMETER, ElementType.TYPE})
+    @IntDef({Instance.OPERATE_MODE_CLIENT, Instance.OPERATE_MODE_SERVER})
+    public @interface ServerModes { }
 
     @Retention(RetentionPolicy.SOURCE)
     @Target({ElementType.TYPE_USE, ElementType.PARAMETER, ElementType.TYPE})

@@ -326,3 +326,4 @@ obj/
 !/gradle/wrapper/gradle-wrapper.jar
 
 # End of https://www.toptal.com/developers/gitignore/api/android,java,androidstudio,gradle,kotlin,intellij
+/amuse_permit/javadoc/

@@ -4,6 +4,11 @@ import android.net.Uri;
 
 import androidx.annotation.Nullable;
 
+/**
+ * Receives call backs for changes to content.
+ *
+ * @see android.database.ContentObserver
+ */
 @SuppressWarnings("unused")
 public abstract class ContentObserver {
 

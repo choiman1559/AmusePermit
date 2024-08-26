@@ -28,6 +28,15 @@ import com.amuse.permit.process.action.ResultCreator;
 
 import java.util.ArrayList;
 
+/**
+ * Provides access to information about the telephony services on
+ * the device. Applications can use the methods in this class to
+ * determine telephony services and states, as well as to access some
+ * types of subscriber information. Applications can also register
+ * a listener to receive notification of telephony state changes.
+ *
+ * @see android.telephony.TelephonyManager
+ */
 @SuppressWarnings("unused")
 @Annotations.RequesterSide
 public class TelephonyManager extends Wrappable {
@@ -40,11 +49,24 @@ public class TelephonyManager extends Wrappable {
         this.context = context;
     }
 
+    /**
+     * Get default {@link TelephonyManager} instance,
+     * equivalent constructor with {@link Context#getSystemService(String)} and <code>TelephonyManager.class</code>
+     *
+     * @param context Application context instance
+     * @return the default {@link TelephonyManager} instance
+     */
     @Annotations.Constructor
     public static TelephonyManager getDefaultTelephonyManager(Context context) {
         return new TelephonyManager(context);
     }
 
+    /**
+     * Create a new TelephonyManager object pinned to the given subscription ID.
+     *
+     * @return a TelephonyManager that uses the given subId for all calls.
+     * @see android.telephony.TelephonyManager#createForSubscriptionId(int)
+     */
     @Annotations.Constructor
     @RequiresApi(api = Build.VERSION_CODES.N)
     public static TelephonyManager createForSubscriptionId(Context context, Integer subId) {
@@ -53,6 +75,14 @@ public class TelephonyManager extends Wrappable {
         return manager;
     }
 
+    /**
+     * Create a new TelephonyManager object pinned to the subscription ID associated with the given
+     * phone account.
+     *
+     * @return a TelephonyManager that uses the given phone account for all calls, or {@code null}
+     * if the phone account does not correspond to a valid subscription ID.
+     * @see TelephonyManager#createForPhoneAccountHandle(Context, PhoneAccountHandle)
+     */
     @Annotations.Constructor
     @RequiresApi(api = Build.VERSION_CODES.O)
     public static TelephonyManager createForPhoneAccountHandle(Context context, PhoneAccountHandle phoneAccountHandle) {
