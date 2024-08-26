@@ -15,7 +15,7 @@ This leaves significant difficulties in app development and maintenance, includi
 and therefore this project was developed to integrate and avoid the restrictions that exist in sensitive API permissions to solve these problems.
 
 Hereby this framework allows non-privileged applications (clients) to use privileged sensitive APIs through applications (servers) that have already been granted
-the privilege. It is also designed to be as 1:1 as possible with native APIs, 
+the privilege. It is also designed to be as 1:1 matching as possible with native APIs, 
 allowing you to use as many APIs as possible with minimal time and effort for migration.
 
 ## How It Works?
